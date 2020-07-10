@@ -1,7 +1,9 @@
 # fake_sensor_tools
 
 Simulate sensor outputs without real sensor.
-This tools are used as RQt plugins.
+The tools are used as RQt plugins.
+
+:warning: The tools are generally used for checking diagnostics function.
 
 ## Instructions before starting
 
