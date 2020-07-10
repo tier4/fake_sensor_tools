@@ -3,7 +3,7 @@
 Simulate sensor outputs without real sensor.
 The tools are used as RQt plugins.
 
-:warning: The tools are generally used for checking diagnostics function.
+:warning: The tools are generally used for checking diagnostic function.
 
 ## Instructions before starting
 
