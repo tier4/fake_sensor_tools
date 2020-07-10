@@ -16,8 +16,39 @@ sudo socat -d -d pty,raw,echo=0,link=/dev/fake-gnss,mode=666 pty,raw,echo=0,link
 - Then, turn on the switch of `Serial port` to open serial port and transmit data.
   ![window](docs/readme_02.png)
 
-3. Launch sensor driver.
+3. Modify config file for F9P.
 
+  `c94_f9p_rover.yaml`
+  
+```diff
+# Enable u-blox message publishers
+publish:
+  all: false
+  aid:
+    hui: false
+
+  nav:
+    posecef: false
+    pvt: true
++    status: true
++  
++  mon:
++    hw: true
++    comms: true
++  
++config:
++  ant: true
++  itfm: true
++
++itfm:
++  enable: true
++  bb_threshold: 3
++  cw_threshold: 15
++  enable2: false
++  ant_setting: 0
+```
+
+4. Launch sensor driver.
 ```
 roslaunch src/autoware/launcher/sensing_launch/launch/gnss.launch
 ```
