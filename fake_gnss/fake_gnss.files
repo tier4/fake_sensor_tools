@@ -1,0 +1,8 @@
+fake_gnss.qrc
+include/rqt_fake_gnss/rqt_fake_gnss_widget.h
+include/rqt_fake_gnss/rqt_fake_gnss.h
+src/rqt_fake_gnss/rqt_fake_gnss_widget.cpp
+src/rqt_fake_gnss/rqt_fake_gnss.cpp
+ui/rqt_fake_gnss/rqt_fake_gnss_widget.ui
+package.xml
+plugin.xml

@@ -1,0 +1,91 @@
+{
+  "model": "VLP-16",
+  "serial": "711024674",
+  "mac_addr": "60-76-88-20-12-42",
+  "image": {
+    "failsafe": {
+      "signature": 2779096485,
+      "version": 17367808,
+      "timestamp": 1348862775,
+      "data_length": 293836,
+      "data_crc": 4045072806,
+      "res1": 1212435456,
+      "res2": 1343364855,
+      "header_crc": 3114870981
+    },
+    "application": {
+      "signature": 2779096485,
+      "version": 17367808,
+      "timestamp": 1352183794,
+      "data_length": 364496,
+      "data_crc": 3862843394,
+      "res1": 1212435459,
+      "res2": 1351184552,
+      "header_crc": 3972623176
+    }
+  },
+  "sysid": {
+    "bot": {
+      "id": 1212435459,
+      "timestamp": 1351184552
+    },
+    "top": {
+      "id": 1145588752,
+      "timestamp": 1343356599
+    }
+  },
+  "state": {
+    "bot": {
+      "factorymode": 0,
+      "powerup": 0,
+      "runconfig": 0,
+      "wdtimer": 0,
+      "nstatus": 0,
+      "crcerr": 0,
+      "nconfig": 0,
+      "appmode": 1,
+      "wden": 1,
+      "prevaddr": 0,
+      "appaddr": 16777216,
+      "wdto": 118489096
+    },
+    "top": {
+      "factorymode": 0,
+      "powerup": 0,
+      "runconfig": 0,
+      "wdtimer": 0,
+      "nstatus": 0,
+      "crcerr": 0,
+      "nconfig": 0,
+      "appmode": 1,
+      "wden": 1,
+      "prevaddr": 0,
+      "appaddr": 917504,
+      "wdto": 262144008
+    }
+  },
+  "fpgaid": {
+    "bot": {
+      "id": 2,
+      "version": 17367302,
+      "timestamp": 0
+    },
+    "top": {
+      "id": 1,
+      "version": 17302536,
+      "timestamp": 0
+    }
+  },
+  "appid": {
+    "bot": {
+      "type": 2,
+      "version": 17367808,
+      "timestamp": 1352183659
+    },
+    "top": {
+      "type": 1,
+      "version": 17367808,
+      "timestamp": 1348862211
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "gps": {
+    "pps_state": "Absent",
+    "position": ""
+  },
+  "motor": {
+    "state": "On",
+    "rpm": 600,
+    "lock": "Off",
+    "phase": 0
+  },
+  "laser": {
+    "state": "On"
+  }
+}

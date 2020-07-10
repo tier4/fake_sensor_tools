@@ -1,0 +1,14 @@
+<library path="lib/librqt_fake_velodyne">
+  <class name="FakeVelodyne" type="rqt_fake_velodyne::FakeVelodyne" base_class_type="rqt_gui_cpp::Plugin">
+    <description>Simulate Velodyne outputs without real sensor.</description>
+    <qtgui>
+      <group>
+        <label>Fake Sensor Tools</label>
+        <icon type="theme">folder</icon>
+      </group>
+      <label>Fake Velodyne</label>
+      <icon type="file">images/VLP-16.png</icon>
+      <statustip>Simulate Velodyne outputs without real sensor.</statustip>
+    </qtgui>
+  </class>
+</library>

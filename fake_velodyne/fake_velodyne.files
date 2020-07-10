@@ -1,0 +1,8 @@
+fake_velodyne.qrc
+include/rqt_fake_velodyne/rqt_fake_velodyne_widget.h
+include/rqt_fake_velodyne/rqt_fake_velodyne.h
+src/rqt_fake_velodyne/rqt_fake_velodyne_widget.cpp
+src/rqt_fake_velodyne/rqt_fake_velodyne.cpp
+ui/rqt_fake_velodyne/rqt_fake_velodyne_widget.ui
+package.xml
+plugin.xml

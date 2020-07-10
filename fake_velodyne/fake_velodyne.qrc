@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/on.png</file>
+        <file>images/off.png</file>
+        <file>data/status.json</file>
+        <file>data/settings.json</file>
+        <file>data/info.json</file>
+        <file>data/diag.json</file>
+        <file>images/VLS-128-AP.png</file>
+        <file>images/VLP-32C.png</file>
+        <file>images/VLP-16.png</file>
+    </qresource>
+</RCC>

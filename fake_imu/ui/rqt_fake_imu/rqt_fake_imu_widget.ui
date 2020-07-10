@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FakeImuWidget</class>
+ <widget class="QWidget" name="FakeImuWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>832</width>
+    <height>527</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fake IMU</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:slategray;</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="QToolBox" name="toolBox">
+     <property name="styleSheet">
+      <string notr="true">#toolBox::tab:selected { font: bold; color: Lime;}
+#toolBox::tab:!selected { font: bold; color: DarkSlateGrey;}</string>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_0">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>796</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <attribute name="label">
+       <string>General</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>721</width>
+         <height>371</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_0">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_00">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../fake_imu.qrc">:/images/tag300.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_01">
+          <property name="styleSheet">
+           <string notr="true">#label_01{font-size: 14pt;}</string>
+          </property>
+          <property name="text">
+           <string>TAG300</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_02">
+          <property name="text">
+           <string>Device name:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_device_name">
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#lineEdit_device_name { background-color: gainsboro }</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_03">
+          <property name="text">
+           <string>Serial port:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_04">
+          <property name="text">
+           <string>Checksum error:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="pushButton_checksum_error">
+          <property name="minimumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_checksum_error {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_checksum_error:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_checksum_error:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButton_serial_port">
+          <property name="minimumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_serial_port {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_serial_port:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_serial_port:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_05">
+          <property name="text">
+           <string>Debug output:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="pushButton_debug_output">
+          <property name="minimumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_debug_output {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_debug_output:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_debug_output:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>796</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>BIN</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>721</width>
+         <height>321</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_1">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="minimumSize">
+           <size>
+            <width>240</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Log file:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBox_log_file">
+          <property name="styleSheet">
+           <string notr="true">#comboBox_log_file { background-color: gainsboro; }
+#comboBox_log_file QAbstractItemView { background-color: gainsboro; }
+#comboBox_log_file::item:selected { color: DarkTurquoise; background-color: AliceBlue; }</string>
+          </property>
+          <property name="insertPolicy">
+           <enum>QComboBox::InsertAtBottom</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../fake_imu.qrc"/>
+ </resources>
+ <connections/>
+</ui>

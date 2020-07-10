@@ -1,0 +1,8 @@
+fake_imu.qrc
+include/rqt_fake_imu/rqt_fake_imu_widget.h
+include/rqt_fake_imu/rqt_fake_imu.h
+src/rqt_fake_imu/rqt_fake_imu_widget.cpp
+src/rqt_fake_imu/rqt_fake_imu.cpp
+ui/rqt_fake_imu/rqt_fake_imu_widget.ui
+package.xml
+plugin.xml

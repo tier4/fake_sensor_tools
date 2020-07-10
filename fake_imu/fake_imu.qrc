@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/tag300.png</file>
+        <file>images/on.png</file>
+        <file>images/off.png</file>
+        <file>data/TAG300.bin</file>
+        <file>data/TAG300_error.bin</file>
+    </qresource>
+</RCC>
