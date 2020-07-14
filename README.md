@@ -22,7 +22,7 @@ sudo apt install socat
 3. Install dependencies using `rosdep`.
 
 ```
-cd fake_sensor_tool
+cd fake_sensor_tools
 rosdep update
 rosdep install -y --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 ```
