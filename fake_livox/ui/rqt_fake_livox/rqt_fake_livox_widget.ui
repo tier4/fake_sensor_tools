@@ -1,0 +1,1298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FakeLivoxWidget</class>
+ <widget class="QWidget" name="FakeLivoxWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1549</width>
+    <height>1273</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fake Livox</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:slategray;</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="0">
+    <widget class="QToolBox" name="toolBox">
+     <property name="styleSheet">
+      <string notr="true">#toolBox::tab:selected { font: bold; color: Lime;}
+#toolBox::tab:!selected { font: bold; color: DarkSlateGrey;}</string>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_0">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1513</width>
+        <height>1127</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>General</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>9</y>
+         <width>951</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_0">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_00">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../fake_livox.qrc">:/images/horizon.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_01">
+          <property name="styleSheet">
+           <string notr="true">#label_01{font-size: 14pt;}</string>
+          </property>
+          <property name="text">
+           <string>Horizon</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_05">
+          <property name="text">
+           <string>Broadcast code:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_02">
+          <property name="text">
+           <string>Communication:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_03">
+          <property name="text">
+           <string>Checksum error:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_04">
+          <property name="text">
+           <string>Debug output:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_broadcast_code">
+          <property name="styleSheet">
+           <string notr="true">#lineEdit_broadcast_code { background-color: gainsboro }</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButton_comm">
+          <property name="minimumSize">
+           <size>
+            <width>39</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_comm {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_comm:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_comm:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="pushButton_checksum_error">
+          <property name="minimumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_checksum_error {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_checksum_error:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_checksum_error:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="pushButton_debug_output">
+          <property name="minimumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_debug_output {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_debug_output:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_debug_output:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1513</width>
+        <height>1127</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QRadioButton {
+  padding: 5px 10px;
+  background-color: gainsboro; 
+  border-radius: 12px;
+  font:bold;
+}
+
+QRadioButton::indicator {
+  background-color:transparent;
+  selection-background-color:transparent;
+  color:transparent;
+  selection-color:transparent;
+}
+
+QRadioButton::hover{
+  color: DarkTurquoise; 
+}
+
+QRadioButton::checked {
+  color: DarkTurquoise;
+  background-color: AliceBlue;
+}
+
+QRadioButton::unchecked {
+    background-color: gainsboro; 
+}
+
+</string>
+      </property>
+      <attribute name="label">
+       <string>Heartbeat</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>19</x>
+         <y>9</y>
+         <width>941</width>
+         <height>301</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_1">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Return Code:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>LiDAR State:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBox_lidar_state">
+          <property name="styleSheet">
+           <string notr="true">#comboBox_lidar_state { background-color: gainsboro; }
+#comboBox_lidar_state QAbstractItemView { background-color: gainsboro; }
+#comboBox_lidar_state::item:selected { color: DarkTurquoise; background-color: AliceBlue; }</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <layout class="QFormLayout" name="formLayout">
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="radioButton_return_code_0">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>Success</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="radioButton_return_code_1">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#radioButton_return_code_1
+{
+  spacing: 40px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Fail</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QStackedWidget" name="stackedWidget_1">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>310</y>
+         <width>1491</width>
+         <height>831</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="page_10">
+        <widget class="QWidget" name="formLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>881</width>
+           <height>341</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Initialization Progress:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QwtSlider" name="slider_initialization_progress">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="handleSize">
+             <size>
+              <width>35</width>
+              <height>35</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_11">
+        <property name="styleSheet">
+         <string notr="true">#radioButton_temp_status_0 {  spacing: -22px; }
+#radioButton_temp_status_1 {  spacing: 76px; }
+#radioButton_temp_status_2 {  spacing: -22px; }
+#radioButton_volt_status_0 {   }
+#radioButton_volt_status_1 {  spacing: 120px; }
+#radioButton_volt_status_2 {  spacing: 76px; }
+#radioButton_motor_status_0 {  spacing: 20px; }
+#radioButton_motor_status_1 {   }
+#radioButton_motor_status_2 {  spacing: -22px; }
+#radioButton_dirty_warn_0 {  spacing: 30px; }
+#radioButton_dirty_warn_1 {  spacing: 50px; }
+#radioButton_firmware_status_0 {  spacing: 56px; }
+#radioButton_firmware_status_1 {  spacing: -5px; }
+#radioButton_pps_status_0 {  spacing: 64px; }
+#radioButton_pps_status_1 {  spacing: 50px; }
+#radioButton_device_status_0 {  spacing: 100px; }
+#radioButton_device_status_1 {  spacing: -20px; }
+#radioButton_fan_status_0 {  spacing: 40px; }
+#radioButton_fan_status_1 {  spacing: 40px; }
+#radioButton_self_heating_0 {  spacing: -24px; }
+#radioButton_self_heating_1 {  spacing: -24px; }
+#radioButton_ptp_status_0 {  spacing: 60px; }
+#radioButton_ptp_status_1 {  spacing: 50px; }
+#radioButton_time_sync_status_0 {  spacing: -24px; }
+#radioButton_time_sync_status_1 {  spacing: 40px; }
+#radioButton_time_sync_status_2 {  spacing: -12px; }
+#radioButton_time_sync_status_3 {  spacing: -12px; }
+#radioButton_time_sync_status_4 {  spacing: -22px; }
+#radioButton_system_status_0 {  spacing: 100px; }
+#radioButton_system_status_1 {  spacing: 100px; }
+#radioButton_system_status_2 {  spacing: 120px; }</string>
+        </property>
+        <widget class="QWidget" name="formLayoutWidget_5">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>19</y>
+           <width>1491</width>
+           <height>854</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>temp_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QWidget" name="widget_0" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_temp_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Temperature in Normal State</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_temp_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>High or Low</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_temp_status_2">
+             <property name="geometry">
+              <rect>
+               <x>740</x>
+               <y>0</y>
+               <width>421</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Extremely High or Extremely Low</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>volt_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QWidget" name="widget_1" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_volt_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Voltage in Normal State</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_volt_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>High</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_volt_status_2">
+             <property name="geometry">
+              <rect>
+               <x>740</x>
+               <y>0</y>
+               <width>421</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Extremely High</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>motor_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QWidget" name="widget_2" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_motor_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Motor in Normal State</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_motor_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Motor in Warning State</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_motor_status_2">
+             <property name="geometry">
+              <rect>
+               <x>740</x>
+               <y>0</y>
+               <width>461</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Motor in Error State, Unable to Work</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>dirty_warn:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QWidget" name="widget_3" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_dirty_warn_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Not Dirty or Blocked</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_dirty_warn_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Dirty or Blocked</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>firmware_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QWidget" name="widget_4" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_firmware_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Firmware is OK</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_firmware_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>591</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Firmware is Abnormal, Need to be Upgraded</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>pps_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QWidget" name="widget_5" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_pps_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>No PPS Signal</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_pps_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>PPS Signal is OK</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>device_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QWidget" name="widget_6" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_device_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Normal</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_device_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>591</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Warning for Approaching the End of Service Life</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>fan_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QWidget" name="widget_7" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_fan_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Fan in Normal State</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_fan_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Fan in Warning State</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>self_heating:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QWidget" name="widget_8" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_self_heating_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>421</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Low Temperature Self Heating On</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_self_heating_1">
+             <property name="geometry">
+              <rect>
+               <x>420</x>
+               <y>0</y>
+               <width>431</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Low Temperature Self Heating Off</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>ptp_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QWidget" name="widget_9" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_ptp_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>No 1588 Signal</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_ptp_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>1588 Signal is OK</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>time_sync_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QWidget" name="widget_10" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_time_sync_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>541</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>System dose not start time synchronization</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_time_sync_status_1">
+             <property name="geometry">
+              <rect>
+               <x>540</x>
+               <y>0</y>
+               <width>521</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Using PTP 1588 synchronization</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_time_sync_status_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>50</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Using GPS synchronization</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_time_sync_status_4">
+             <property name="geometry">
+              <rect>
+               <x>740</x>
+               <y>50</y>
+               <width>521</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>System time synchronization is abnormal</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_time_sync_status_3">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>50</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Using PPS synchronization</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>system_status:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QWidget" name="widget_11" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <widget class="QRadioButton" name="radioButton_system_status_0">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Normal</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_system_status_1">
+             <property name="geometry">
+              <rect>
+               <x>370</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Warning</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_system_status_2">
+             <property name="geometry">
+              <rect>
+               <x>740</x>
+               <y>0</y>
+               <width>371</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Error</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_1">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>140</y>
+         <width>931</width>
+         <height>151</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#groupBox_1 { font: bold;}
+QGroupBox  {
+    border: 3px Solid Gray;
+    border-color: #FF17365D;
+    margin-top: 40px;
+    border-radius: 15px;
+}</string>
+       </property>
+       <property name="title">
+        <string>LiDAR Feature Message</string>
+       </property>
+       <widget class="QWidget" name="formLayoutWidget_4">
+        <property name="geometry">
+         <rect>
+          <x>19</x>
+          <y>69</y>
+          <width>891</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Rain/Fog Suppression Switch:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pushButton_rain_fog_suppression_switch">
+           <property name="minimumSize">
+            <size>
+             <width>39</width>
+             <height>39</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>72</width>
+             <height>39</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#pushButton_rain_fog_suppression_switch {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_rain_fog_suppression_switch:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_rain_fog_suppression_switch:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QwtSlider</class>
+   <extends>QWidget</extends>
+   <header>qwt_slider.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../fake_livox.qrc"/>
+ </resources>
+ <connections/>
+</ui>
