@@ -562,11 +562,18 @@ void FakeLivoxWidget::send(ip::udp::endpoint ep, SdkPacket * packet, uint8_t * p
   memcpy(packet->data, payload, payload_size);
 
   uint32_t crc = crc32_.crc32_calc(ptr, packet->length - kSdkPacketCrcSize);
-  ptr[packet->length - 4] = crc & 0xFF;
-  ptr[packet->length - 3] = (crc >> 8) & 0xFF;
-  ptr[packet->length - 2] = (crc >> 16) & 0xFF;
-  ptr[packet->length - 1] = (crc >> 24) & 0xFF;
 
+  if (!emit signal_get_checksum_error()) {
+    ptr[packet->length - 4] = crc & 0xFF;
+    ptr[packet->length - 3] = (crc >> 8) & 0xFF;
+    ptr[packet->length - 2] = (crc >> 16) & 0xFF;
+    ptr[packet->length - 1] = (crc >> 24) & 0xFF;
+  } else {
+    ptr[packet->length - 4] = '?';
+    ptr[packet->length - 3] = '?';
+    ptr[packet->length - 2] = '?';
+    ptr[packet->length - 1] = '?';
+  }
   std::vector<uint8_t> frame(ptr, ptr + packet->length);
 
   // Start an asynchronous send
