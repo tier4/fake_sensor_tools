@@ -46,6 +46,22 @@ Then transmission will be started.
 
 ### If LiDAR State is not `Initializing`
 
+Status Code can be set using the settings of "Push Abnormal Status".
+
+### If LiDAR State is `Initializing`
+
+![window](docs/readme_04.png)
+
+| Field                     | Description             | Notes |
+| ------------------------- | ----------------------- | ----- |
+| `Initialization Progress` | Initialization Progress |       |
+
+---
+
+## `Push Abnormal Status` page
+
+![window](docs/readme_05.png)
+
 | Field              | Description                       | Notes                                                                             |
 | ------------------ | --------------------------------- | --------------------------------------------------------------------------------- |
 | `temp_status`      | Temperature Status                |                                                                                   |
@@ -65,10 +81,4 @@ Then transmission will be started.
 
 - [Livox SDK Communication Protocol](https://github.com/Livox-SDK/Livox-SDK/wiki/Livox-SDK-Communication-Protocol)
 
-### If LiDAR State is `Initializing`
-
-![window](docs/readme_04.png)
-
-| Field                     | Description             | Notes |
-| ------------------------- | ----------------------- | ----- |
-| `Initialization Progress` | Initialization Progress |       |
+When the `system_status` is changed from 'Normal' to `Warning` or `Error`, the `Push Abnormal Status` message will be immediately transmitted at 10Hz.

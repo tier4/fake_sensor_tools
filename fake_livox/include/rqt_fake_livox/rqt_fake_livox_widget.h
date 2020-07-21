@@ -555,6 +555,11 @@ private:
   void sendGeneralBroadcast(void);
 
   /**
+   * @brief Send Push Abnormal Status.
+   */
+  void sendPushAbnormalStatus(void);
+
+  /**
    * @brief Update system_status.
    */
   void updateSystemStatus(void);

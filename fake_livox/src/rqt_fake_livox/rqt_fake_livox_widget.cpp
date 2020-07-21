@@ -331,9 +331,12 @@ void * FakeLivoxWidget::thread(void)
     pthread_mutex_unlock(&mutex_stop_);
     if (b) break;
 
-    // 100ms
+    if (emit signal_get_system_status() != 0) {
+      sendPushAbnormalStatus();
+    }
+
+    // 10Hz
     usleep(100000);
-    break;
   }
 
   return nullptr;
@@ -598,6 +601,34 @@ void FakeLivoxWidget::sendGeneralBroadcast(void)
 
   ip::udp::endpoint ep = ip::udp::endpoint(ip::address_v4::broadcast(), 55000);
   send(ep, &out, ptr, sizeof(BroadcastDeviceInfo));
+}
+
+void FakeLivoxWidget::sendPushAbnormalStatus(void)
+{
+  SdkPacket out = {};
+  out.packet_type = kCommandTypeMsg;
+  out.seq_num = 0;
+  out.cmd_set = kCommandSetGeneral;
+  out.cmd_id = kCommandIDGeneralPushAbnormalState;
+
+  LidarErrorCode payload = {};
+  uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
+
+  payload.temp_status = emit signal_get_temp_status();
+  payload.volt_status = emit signal_get_volt_status();
+  payload.motor_status = emit signal_get_motor_status();
+  payload.dirty_warn = emit signal_get_dirty_warn();
+  payload.firmware_err = emit signal_get_firmware_status();
+  payload.pps_status = emit signal_get_pps_status();
+  payload.device_status = emit signal_get_device_status();
+  payload.fan_status = emit signal_get_fan_status();
+  payload.self_heating = emit signal_get_self_heating();
+  payload.ptp_status = emit signal_get_ptp_status();
+  payload.time_sync_status = emit signal_get_time_sync_status();
+  payload.system_status = emit signal_get_system_status();
+
+  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  send(ep, &out, ptr, sizeof(LidarErrorCode));
 }
 
 void FakeLivoxWidget::updateSystemStatus(void)
