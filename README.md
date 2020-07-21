@@ -1,7 +1,9 @@
 # fake_sensor_tools
 
 Simulate sensor outputs without real sensor.
-This tools are used as RQt plugins.
+The tools are used as RQt plugins.
+
+:warning: The tools are generally used for checking diagnostic function.
 
 ## Instructions before starting
 
@@ -20,7 +22,7 @@ sudo apt install socat
 3. Install dependencies using `rosdep`.
 
 ```
-cd fake_sensor_tool
+cd fake_sensor_tools
 rosdep update
 rosdep install -y --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 ```
