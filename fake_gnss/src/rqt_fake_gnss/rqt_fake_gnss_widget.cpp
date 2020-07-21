@@ -176,6 +176,7 @@ void FakeGnssWidget::stop(void)
   pthread_mutex_unlock(&mutex_stop_);
   if (th_ptr_ != nullptr) pthread_join(th_, NULL);
   th_ptr_ = nullptr;
+  port_->close();
   io_.stop();
 }
 

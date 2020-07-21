@@ -317,7 +317,7 @@ private:
   void sendUbxMonCOMMS(void);
 
   /**
-   * @brief Send cdata.
+   * @brief Send data.
    * @param data Start of range
    * @param size Size of range
    */
