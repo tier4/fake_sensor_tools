@@ -44,8 +44,8 @@ std::map<UBX_ID, FakeGnssWidget::PERIODIC_TRANSMIT> FakeGnssWidget::periodic_map
 };
 
 std::map<std::string, PortBlock> FakeGnssWidget::port_blocks_ = {
-  {"I2C", {false, 0}}, {"UART1", {false, 0}}, {"UART2", {false, 0}},
-  {"USB", {true, 0}},  {"SPI", {false, 0}},
+  {"I2C", {0, false, 0}}, {"UART1", {1, false, 0}}, {"UART2", {2, false, 0}},
+  {"USB", {3, true, 0}},  {"SPI", {4, false, 0}},
 };
 
 FakeGnssWidget::FakeGnssWidget(QWidget * parent)
@@ -393,8 +393,6 @@ void FakeGnssWidget::sendUbxMonCOMMS(void)
   std::vector<uint8_t> d{0xB5, 0x62, 0x0A, 0x36, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-  uint16_t id = 0;
-
   pthread_mutex_lock(&mutex_port_);
   for (const auto & p : port_blocks_) {
     uint8_t b[40] = {};
@@ -402,11 +400,10 @@ void FakeGnssWidget::sendUbxMonCOMMS(void)
       // nPorts
       ++d[7];
       uint16_t * portId = reinterpret_cast<uint16_t *>(&b[0]);
-      *portId = id;
+      *portId = p.second.port_id;
       b[8] = p.second.tx_usage;
       d.insert(d.end(), &b[0], &b[sizeof(b)]);
     }
-    ++id;
   }
   pthread_mutex_unlock(&mutex_port_);
 

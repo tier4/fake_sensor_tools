@@ -54,6 +54,7 @@ struct UBX_ID
  */
 typedef struct
 {
+  int port_id;
   bool port_enabled;
   int tx_usage;
 } PortBlock;
