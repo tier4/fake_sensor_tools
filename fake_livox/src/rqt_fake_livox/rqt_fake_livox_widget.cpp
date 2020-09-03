@@ -595,8 +595,7 @@ void FakeLivoxWidget::sendGeneralBroadcast(void)
 
   BroadcastDeviceInfo payload = {};
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
-  snprintf(
-    payload.broadcast_code, kBroadcastCodeSize - 1, "%s", emit signal_get_broadcast_code().toStdString().c_str());
+  snprintf(payload.broadcast_code, kBroadcastCodeSize, "%s", emit signal_get_broadcast_code().toStdString().c_str());
   payload.dev_type = kDeviceTypeLidarHorizon;
 
   ip::udp::endpoint ep = ip::udp::endpoint(ip::address_v4::broadcast(), 55000);
