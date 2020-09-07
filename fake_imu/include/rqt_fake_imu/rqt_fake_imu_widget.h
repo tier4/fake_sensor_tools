@@ -117,10 +117,7 @@ private:
    * @brief Thread helper funcion.
    * @param [in] arg Argument
    */
-  static void * threadHelper(void * arg)
-  {
-    return reinterpret_cast<FakeImuWidget *>(arg)->thread();
-  }
+  static void * threadHelper(void * arg) { return reinterpret_cast<FakeImuWidget *>(arg)->thread(); }
 
   /**
    * @brief Thread loop.
@@ -134,7 +131,7 @@ private:
    * @param [in] data Pointer to data
    * @param [in] size Size of data
    */
-  void dump(Direction dir, const uint8_t * data, std::size_t size);
+  void dump(Direction dir, const std::string & data, std::size_t size);
 
   /**
    * @brief Dump received BIN Data.
@@ -148,8 +145,7 @@ private:
    * @param [in] bytes_transfered Bytes transferred argument of a handler
    * @param [inout] data Received data
    */
-  void onRead(
-    const boost::system::error_code & error, std::size_t bytes_transfered, const uint8_t * data);
+  void onRead(const boost::system::error_code & error, std::size_t bytes_transfered);
 
   /**
    * @brief Handler to be called when the write operation completes.
@@ -158,12 +154,12 @@ private:
    * @param [inout] data Sent data
    */
   void onWrite(
-    const boost::system::error_code & error, std::size_t bytes_transfered,
-    const std::vector<uint8_t> & data);
+    const boost::system::error_code & error, std::size_t bytes_transfered, const std::vector<uint8_t> & data);
 
   Ui::FakeImuWidget * ui;                    //!< @brief UI
   as::io_service io_;                        //!< @brief facilities of custom asynchronous services
   boost::shared_ptr<as::serial_port> port_;  //!< @brief wrapper over serial port functionality
+  as::streambuf buffer_;                     //!< @brief Received data
   pthread_mutex_t mutex_stop_;               //!< @brief mutex to protect access to stop_thread
   pthread_t th_;                             //!< @brief thread handle
   pthread_t * th_ptr_;                       //!< @brief pointer to thread handle
