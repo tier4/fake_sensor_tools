@@ -87,7 +87,7 @@ void FakeLivoxWidget::setBroadcastCode(const QString & broadcast_code)
   ui->lineEdit_broadcast_code->setText(broadcast_code);
 }
 
-QString FakeLivoxWidget::getBroadcastCode(void) { return ui->lineEdit_broadcast_code->text(); }
+QString FakeLivoxWidget::getBroadcastCode() { return ui->lineEdit_broadcast_code->text(); }
 
 void FakeLivoxWidget::on_pushButton_comm_toggled(bool checked)
 {
@@ -208,68 +208,66 @@ void FakeLivoxWidget::on_radioButton_fan_status_1_toggled(bool checked)
   updateSystemStatus();
 }
 
-QString FakeLivoxWidget::get_broadcast_code(void) { return ui->lineEdit_broadcast_code->text(); }
+QString FakeLivoxWidget::get_broadcast_code() { return ui->lineEdit_broadcast_code->text(); }
 
-bool FakeLivoxWidget::get_checksum_error(void) { return ui->pushButton_checksum_error->isChecked(); }
+bool FakeLivoxWidget::get_checksum_error() { return ui->pushButton_checksum_error->isChecked(); }
 
-bool FakeLivoxWidget::get_debug_output(void) { return ui->pushButton_debug_output->isChecked(); }
+bool FakeLivoxWidget::get_debug_output() { return ui->pushButton_debug_output->isChecked(); }
 
-int FakeLivoxWidget::get_return_code(void) { return (ui->radioButton_return_code_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_return_code() { return (ui->radioButton_return_code_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_lidar_state(void) { return ui->comboBox_lidar_state->currentIndex(); }
+int FakeLivoxWidget::get_lidar_state() { return ui->comboBox_lidar_state->currentIndex(); }
 
-int FakeLivoxWidget::get_rain_fog_suppression_switch(void)
+int FakeLivoxWidget::get_rain_fog_suppression_switch()
 {
   return ui->pushButton_rain_fog_suppression_switch->isChecked();
 }
-int FakeLivoxWidget::get_initialization_progress(void) { return ui->slider_initialization_progress->value(); }
+int FakeLivoxWidget::get_initialization_progress() { return ui->slider_initialization_progress->value(); }
 
-int FakeLivoxWidget::get_temp_status(void)
+int FakeLivoxWidget::get_temp_status()
 {
   return (ui->radioButton_temp_status_0->isChecked()) ? 0 : (ui->radioButton_temp_status_1->isChecked()) ? 1 : 2;
 }
 
-int FakeLivoxWidget::get_volt_status(void)
+int FakeLivoxWidget::get_volt_status()
 {
   return (ui->radioButton_volt_status_0->isChecked()) ? 0 : (ui->radioButton_volt_status_1->isChecked()) ? 1 : 2;
 }
 
-int FakeLivoxWidget::get_motor_status(void)
+int FakeLivoxWidget::get_motor_status()
 {
   return (ui->radioButton_motor_status_0->isChecked()) ? 0 : (ui->radioButton_motor_status_1->isChecked()) ? 1 : 2;
 }
 
-int FakeLivoxWidget::get_dirty_warn(void) { return (ui->radioButton_dirty_warn_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_dirty_warn() { return (ui->radioButton_dirty_warn_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_firmware_status(void) { return (ui->radioButton_firmware_status_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_firmware_status() { return (ui->radioButton_firmware_status_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_pps_status(void) { return (ui->radioButton_pps_status_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_pps_status() { return (ui->radioButton_pps_status_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_device_status(void) { return (ui->radioButton_device_status_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_device_status() { return (ui->radioButton_device_status_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_fan_status(void) { return (ui->radioButton_fan_status_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_fan_status() { return (ui->radioButton_fan_status_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_self_heating(void) { return (ui->radioButton_self_heating_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_self_heating() { return (ui->radioButton_self_heating_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_ptp_status(void) { return (ui->radioButton_ptp_status_0->isChecked()) ? 0 : 1; }
+int FakeLivoxWidget::get_ptp_status() { return (ui->radioButton_ptp_status_0->isChecked()) ? 0 : 1; }
 
-int FakeLivoxWidget::get_time_sync_status(void)
+int FakeLivoxWidget::get_time_sync_status()
 {
-  return (ui->radioButton_time_sync_status_0->isChecked())
-           ? 0
-           : (ui->radioButton_time_sync_status_1->isChecked())
-               ? 1
-               : (ui->radioButton_time_sync_status_2->isChecked())
-                   ? 2
-                   : (ui->radioButton_time_sync_status_3->isChecked()) ? 3 : 4;
+  return (ui->radioButton_time_sync_status_0->isChecked())   ? 0
+         : (ui->radioButton_time_sync_status_1->isChecked()) ? 1
+         : (ui->radioButton_time_sync_status_2->isChecked()) ? 2
+         : (ui->radioButton_time_sync_status_3->isChecked()) ? 3
+                                                             : 4;
 }
 
-int FakeLivoxWidget::get_system_status(void)
+int FakeLivoxWidget::get_system_status()
 {
   return (ui->radioButton_system_status_0->isChecked()) ? 0 : (ui->radioButton_system_status_1->isChecked()) ? 1 : 2;
 }
 
-int FakeLivoxWidget::start(void)
+int FakeLivoxWidget::start()
 {
   int ret = 0;
 
@@ -310,7 +308,7 @@ void FakeLivoxWidget::stop()
 }
 
 #include <boost/array.hpp>
-void * FakeLivoxWidget::thread(void)
+void * FakeLivoxWidget::thread()
 {
   // Send broadcast command
   sendGeneralBroadcast();
@@ -585,7 +583,7 @@ void FakeLivoxWidget::send(ip::udp::endpoint ep, SdkPacket * packet, uint8_t * p
     boost::bind(&FakeLivoxWidget::onWrite, this, as::placeholders::error, as::placeholders::bytes_transferred, frame));
 }
 
-void FakeLivoxWidget::sendGeneralBroadcast(void)
+void FakeLivoxWidget::sendGeneralBroadcast()
 {
   SdkPacket out = {};
   out.packet_type = kCommandTypeCmd;
@@ -602,7 +600,7 @@ void FakeLivoxWidget::sendGeneralBroadcast(void)
   send(ep, &out, ptr, sizeof(BroadcastDeviceInfo));
 }
 
-void FakeLivoxWidget::sendPushAbnormalStatus(void)
+void FakeLivoxWidget::sendPushAbnormalStatus()
 {
   SdkPacket out = {};
   out.packet_type = kCommandTypeMsg;
@@ -630,7 +628,7 @@ void FakeLivoxWidget::sendPushAbnormalStatus(void)
   send(ep, &out, ptr, sizeof(LidarErrorCode));
 }
 
-void FakeLivoxWidget::updateSystemStatus(void)
+void FakeLivoxWidget::updateSystemStatus()
 {
   int level = 0;
   for (auto s : status_codes_) {

@@ -87,18 +87,18 @@ public:
    * @brief Get broadcast code.
    * @return Broadcast code
    */
-  QString getBroadcastCode(void);
+  QString getBroadcastCode();
 
   /**
    * @brief Start UDP communication.
    * @return 0 on success, otherwise error
    */
-  int start(void);
+  int start();
 
   /**
    * @brief Stop UDP communication.
    */
-  void stop(void);
+  void stop();
 
 private slots:
   /**
@@ -111,19 +111,19 @@ private slots:
    * @brief Get broadcast code thread-safely.
    * @return Broadcast code
    */
-  QString get_broadcast_code(void);
+  QString get_broadcast_code();
 
   /**
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool get_checksum_error(void);
+  bool get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool get_debug_output(void);
+  bool get_debug_output();
 
   /**
    * @brief This signal is emitted whenever a checkable button changes its state.
@@ -237,212 +237,212 @@ private slots:
    * @brief Get Return Code thread-safely.
    * @return Return Code
    */
-  int get_return_code(void);
+  int get_return_code();
 
   /**
    * @brief Get LiDAR State thread-safely.
    * @return LiDAR State
    */
-  int get_lidar_state(void);
+  int get_lidar_state();
 
   /**
    * @brief Get Rain/Fog Suppression Switch thread-safely.
    * @return Rain/Fog Suppression Switch
    */
-  int get_rain_fog_suppression_switch(void);
+  int get_rain_fog_suppression_switch();
 
   /**
    * @brief Get Initialization Progress thread-safely.
    * @return Initialization Progress
    */
-  int get_initialization_progress(void);
+  int get_initialization_progress();
 
   /**
    * @brief Get temp_status thread-safely.
    * @return temp_status
    */
-  int get_temp_status(void);
+  int get_temp_status();
 
   /**
    * @brief Get volt_status thread-safely.
    * @return volt_status
    */
-  int get_volt_status(void);
+  int get_volt_status();
 
   /**
    * @brief Get motor_status thread-safely.
    * @return volt_status
    */
-  int get_motor_status(void);
+  int get_motor_status();
 
   /**
    * @brief Get dirty_warn thread-safely.
    * @return dirty_warn
    */
-  int get_dirty_warn(void);
+  int get_dirty_warn();
 
   /**
    * @brief Get firmware_status thread-safely.
    * @return firmware_status
    */
-  int get_firmware_status(void);
+  int get_firmware_status();
 
   /**
    * @brief Get pps_status thread-safely.
    * @return pps_status
    */
-  int get_pps_status(void);
+  int get_pps_status();
 
   /**
    * @brief Get device_status thread-safely.
    * @return device_status
    */
-  int get_device_status(void);
+  int get_device_status();
 
   /**
    * @brief Get fan_status thread-safely.
    * @return fan_status
    */
-  int get_fan_status(void);
+  int get_fan_status();
 
   /**
    * @brief Get self_heating thread-safely.
    * @return self_heating
    */
-  int get_self_heating(void);
+  int get_self_heating();
 
   /**
    * @brief Get ptp_status thread-safely.
    * @return ptp_status
    */
-  int get_ptp_status(void);
+  int get_ptp_status();
 
   /**
    * @brief Get time_sync_status thread-safely.
    * @return time_sync_status
    */
-  int get_time_sync_status(void);
+  int get_time_sync_status();
 
   /**
    * @brief Get get_system_status thread-safely.
    * @return get_system_status
    */
-  int get_system_status(void);
+  int get_system_status();
 
 Q_SIGNALS:
   /**
    * @brief Get broadcast code thread-safely.
    * @return Broadcast code
    */
-  QString signal_get_broadcast_code(void);
+  QString signal_get_broadcast_code();
 
   /**
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool signal_get_checksum_error(void);
+  bool signal_get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool signal_get_debug_output(void);
+  bool signal_get_debug_output();
 
   /**
    * @brief Get Return Code thread-safely.
    * @return Return Code
    */
-  int signal_get_return_code(void);
+  int signal_get_return_code();
 
   /**
    * @brief Get LiDAR State thread-safely.
    * @return LiDAR State
    */
-  int signal_get_lidar_state(void);
+  int signal_get_lidar_state();
 
   /**
    * @brief Get Rain/Fog Suppression Switch thread-safely.
    * @return Rain/Fog Suppression Switch
    */
-  int signal_get_rain_fog_suppression_switch(void);
+  int signal_get_rain_fog_suppression_switch();
 
   /**
    * @brief Get Initialization Progress thread-safely.
    * @return Initialization Progress
    */
-  int signal_get_initialization_progress(void);
+  int signal_get_initialization_progress();
 
   /**
    * @brief Get temp_status thread-safely.
    * @return temp_status
    */
-  int signal_get_temp_status(void);
+  int signal_get_temp_status();
 
   /**
    * @brief Get volt_status thread-safely.
    * @return volt_status
    */
-  int signal_get_volt_status(void);
+  int signal_get_volt_status();
 
   /**
    * @brief Get motor_status thread-safely.
    * @return volt_status
    */
-  int signal_get_motor_status(void);
+  int signal_get_motor_status();
 
   /**
    * @brief Get dirty_warn thread-safely.
    * @return dirty_warn
    */
-  int signal_get_dirty_warn(void);
+  int signal_get_dirty_warn();
 
   /**
    * @brief Get firmware_status thread-safely.
    * @return firmware_status
    */
-  int signal_get_firmware_status(void);
+  int signal_get_firmware_status();
 
   /**
    * @brief Get pps_status thread-safely.
    * @return pps_status
    */
-  int signal_get_pps_status(void);
+  int signal_get_pps_status();
 
   /**
    * @brief Get device_status thread-safely.
    * @return device_status
    */
-  int signal_get_device_status(void);
+  int signal_get_device_status();
 
   /**
    * @brief Get fan_status thread-safely.
    * @return fan_status
    */
-  int signal_get_fan_status(void);
+  int signal_get_fan_status();
 
   /**
    * @brief Get self_heating thread-safely.
    * @return self_heating
    */
-  int signal_get_self_heating(void);
+  int signal_get_self_heating();
 
   /**
    * @brief Get ptp_status thread-safely.
    * @return ptp_status
    */
-  int signal_get_ptp_status(void);
+  int signal_get_ptp_status();
 
   /**
    * @brief Get time_sync_status thread-safely.
    * @return time_sync_status
    */
-  int signal_get_time_sync_status(void);
+  int signal_get_time_sync_status();
 
   /**
    * @brief Get get_system_status thread-safely.
    * @return get_system_status
    */
-  int signal_get_system_status(void);
+  int signal_get_system_status();
 
 private:
   /**
@@ -465,7 +465,7 @@ private:
    * @brief Thread loop.
    * @return nullptr
    */
-  void * thread(void);
+  void * thread();
 
   /**
    * @brief Dump sent/received Data.
@@ -552,17 +552,17 @@ private:
   /**
    * @brief Send broadcast command.
    */
-  void sendGeneralBroadcast(void);
+  void sendGeneralBroadcast();
 
   /**
    * @brief Send Push Abnormal Status.
    */
-  void sendPushAbnormalStatus(void);
+  void sendPushAbnormalStatus();
 
   /**
    * @brief Update system_status.
    */
-  void updateSystemStatus(void);
+  void updateSystemStatus();
 
   Ui::FakeLivoxWidget * ui;                              //!< @brief UI
   as::io_service io_;                                    //!< @brief facilities of custom asynchronous services
@@ -575,9 +575,9 @@ private:
   FastCRC16 crc16_;                                      //!< @brief 16-BIT CRC
   FastCRC32 crc32_;                                      //!< @brief 32-BIT CRC
   ip::address_v4 user_ip_;                               //!< @brief Host IPAddress
-  uint16_t data_port_;                                   // @brief Host Point Cloud Data UDP Destination Port
-  uint16_t cmd_port_;                                    // @brief Host Control Command UDP Destination Port
-  std::map<std::string, int> status_codes_;              // @brief LiDAR status_codes
+  uint16_t data_port_;                                   //!< @brief Host Point Cloud Data UDP Destination Port
+  uint16_t cmd_port_;                                    //!< @brief Host Control Command UDP Destination Port
+  std::map<std::string, int> status_codes_;              //!< @brief LiDAR status_codes
 };
 
 #endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_

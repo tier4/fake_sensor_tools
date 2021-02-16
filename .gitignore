@@ -1,0 +1,7 @@
+# VSCode
+.vscode/
+
+# catkin / colcon
+build/
+install/
+log/
