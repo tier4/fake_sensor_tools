@@ -174,9 +174,13 @@ void FakePointCloud::send(const u_char * packet)
     p += ((struct iphdr *)p)->ihl * 4;
     const struct udphdr * udp = (struct udphdr *)(p);
     p += sizeof(struct udphdr);
-    asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, data_port_);
+
+    // 2-byte length of payload including UDP header (8 bytes)
+    uint16_t len = ntohs(udp->len) - sizeof(struct udphdr);
+    std::vector<uint8_t> frame(p, p + len);
+
     // Start an synchronous send
-    std::vector<uint8_t> frame(p, p + ntohs(udp->len));
+    asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, data_port_);
     socket_->send_to(as::buffer(frame), ep);
   }
 }
