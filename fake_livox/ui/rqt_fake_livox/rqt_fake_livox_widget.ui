@@ -32,7 +32,7 @@
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>811</height>
+        <height>756</height>
        </rect>
       </property>
       <attribute name="label">
@@ -229,7 +229,7 @@ background-repeat: none;
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>811</height>
+        <height>756</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -504,6 +504,14 @@ background-repeat: none;
       </widget>
      </widget>
      <widget class="QWidget" name="page_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1513</width>
+        <height>756</height>
+       </rect>
+      </property>
       <property name="styleSheet">
        <string notr="true">QRadioButton {
   padding: 5px 10px;
@@ -1322,6 +1330,138 @@ QRadioButton::unchecked {
             <string>Error</string>
            </property>
           </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1513</width>
+        <height>756</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>PCAP</string>
+      </attribute>
+      <widget class="QWidget" name="formLayoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>1421</width>
+         <height>114</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Path:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_pcap_path">
+            <property name="styleSheet">
+             <string notr="true">#lineEdit_pcap_path { background-color: gainsboro }</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_pcap_path">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_pcap_read">
+            <property name="text">
+             <string>Read</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Loop:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButton_pcap_loop">
+          <property name="minimumSize">
+           <size>
+            <width>39</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>39</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#pushButton_pcap_loop {
+background-color: transparent;
+border-image: url(:images/off.png);
+background: none;
+border: none;
+background-repeat: none;
+}
+#pushButton_pcap_loop:pressed
+{
+   border-image: url(:images/on.png);
+}
+#pushButton_pcap_loop:checked
+{
+   border-image: url(:images/on.png);
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>1421</width>
+         <height>521</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>UDP Packets</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="tableView_pcap_packets">
+          <property name="styleSheet">
+           <string notr="true">#tableView_pcap_packets { background-color: gainsboro }</string>
+          </property>
          </widget>
         </item>
        </layout>

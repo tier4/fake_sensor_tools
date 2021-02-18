@@ -36,16 +36,19 @@ void FakeLivox::initPlugin(qt_gui_cpp::PluginContext & context)
 
 void FakeLivox::shutdownPlugin() {}
 
-void FakeLivox::saveSettings(
-  qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
+void FakeLivox::saveSettings(qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
 {
   instance_settings.setValue("broadcast_code", widget->getBroadcastCode());
+  instance_settings.setValue("pcap_path", widget->getPcapPath());
+  instance_settings.setValue("pcap_loop", widget->getPcapLoop());
 }
 
 void FakeLivox::restoreSettings(
   const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings)
 {
   widget->setBroadcastCode(instance_settings.value("broadcast_code", "100000000000000").toString());
+  widget->setPcapPath(instance_settings.value("pcap_path", "").toString());
+  widget->setPcapLoop(instance_settings.value("pcap_path", true).toBool());
 }
 
 }  // end namespace rqt_fake_livox

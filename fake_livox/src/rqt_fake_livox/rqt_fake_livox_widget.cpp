@@ -19,8 +19,14 @@
  * @brief RQt plugin widget class
  */
 
+#include <net/ethernet.h>
 #include <boost/thread.hpp>
 #include <iostream>
+
+#include <QCheckBox>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QProgressDialog>
 
 #include <rqt_fake_livox/rqt_fake_livox_widget.h>
 #include <ui_rqt_fake_livox_widget.h>
@@ -78,6 +84,11 @@ FakeLivoxWidget::FakeLivoxWidget(QWidget * parent)
   connect(
     this, SIGNAL(signal_get_time_sync_status()), this, SLOT(get_time_sync_status()), Qt::BlockingQueuedConnection);
   connect(this, SIGNAL(signal_get_system_status()), this, SLOT(get_system_status()), Qt::BlockingQueuedConnection);
+
+  model_ = new UDPListModel();
+  ui->tableView_pcap_packets->setModel(model_);
+  ui->tableView_pcap_packets->setSelectionBehavior(QAbstractItemView::SelectRows);
+  ui->tableView_pcap_packets->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 FakeLivoxWidget::~FakeLivoxWidget() { delete ui; }
@@ -97,8 +108,18 @@ void FakeLivoxWidget::on_pushButton_comm_toggled(bool checked)
   } else {
     // Stop UDP communication
     stop();
+    // Stop point cloud sampling
+    point_cloud_.stop();
   }
 }
+
+void FakeLivoxWidget::setPcapPath(const QString & pcap_path) { ui->lineEdit_pcap_path->setText(pcap_path); }
+
+QString FakeLivoxWidget::getPcapPath() { return ui->lineEdit_pcap_path->text(); }
+
+void FakeLivoxWidget::setPcapLoop(bool pcap_loop) { ui->pushButton_pcap_loop->setChecked(pcap_loop); }
+
+bool FakeLivoxWidget::getPcapLoop() { return loop_; }
 
 void FakeLivoxWidget::on_comboBox_lidar_state_currentIndexChanged(int index)
 {
@@ -208,6 +229,43 @@ void FakeLivoxWidget::on_radioButton_fan_status_1_toggled(bool checked)
   updateSystemStatus();
 }
 
+void FakeLivoxWidget::on_pushButton_pcap_path_clicked()
+{
+  QString text = ui->lineEdit_pcap_path->text();
+  QString dir = "";
+  if (!text.isEmpty()) {
+    QFileInfo info(text);
+    dir = info.absoluteFilePath();
+  }
+
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), dir, tr("PCAP files (*.pcap)"));
+
+  if (!fileName.isEmpty()) {
+    ui->lineEdit_pcap_path->setText(fileName);
+    // Read pcap
+    readPcap(fileName);
+  }
+}
+
+void FakeLivoxWidget::on_pushButton_pcap_read_clicked()
+{
+  QString fileName = ui->lineEdit_pcap_path->text();
+
+  if (!fileName.isEmpty()) {
+    // Read pcap
+    readPcap(fileName);
+  }
+}
+
+void FakeLivoxWidget::on_pushButton_pcap_loop_toggled(bool checked) { loop_ = checked; }
+
+void FakeLivoxWidget::on_tableView_pcap_packets_doubleClicked(const QModelIndex & index)
+{
+  model_->toggleTransmit(index);
+  // Updates the area
+  ui->tableView_pcap_packets->update();
+}
+
 QString FakeLivoxWidget::get_broadcast_code() { return ui->lineEdit_broadcast_code->text(); }
 
 bool FakeLivoxWidget::get_checksum_error() { return ui->pushButton_checksum_error->isChecked(); }
@@ -273,16 +331,16 @@ int FakeLivoxWidget::start()
 
   // Preparation for a subsequent run() invocation
   io_.reset();
-  socket_ = boost::shared_ptr<ip::udp::socket>(new ip::udp::socket(io_));
+  socket_ = boost::shared_ptr<asip::udp::socket>(new asip::udp::socket(io_));
 
   // Open the socket using the specified protocol
   try {
-    socket_->open(ip::udp::v4());
+    socket_->open(asip::udp::v4());
     // Allow the socket to be bound to an address that is already in use
-    socket_->set_option(ip::udp::socket::reuse_address(true));
+    socket_->set_option(asip::udp::socket::reuse_address(true));
     // Permit sending of broadcast messages
     socket_->set_option(as::socket_base::broadcast(true));
-    ip::udp::endpoint ep = ip::udp::endpoint(ip::address_v4::any(), 65000);
+    asip::udp::endpoint ep = asip::udp::endpoint(asip::address_v4::any(), 65000);
     socket_->bind(ep);
   } catch (const boost::system::system_error & e) {
     ret = ENOENT;
@@ -307,7 +365,6 @@ void FakeLivoxWidget::stop()
   io_.stop();
 }
 
-#include <boost/array.hpp>
 void * FakeLivoxWidget::thread()
 {
   // Send broadcast command
@@ -316,7 +373,7 @@ void * FakeLivoxWidget::thread()
   boost::thread thr_io(boost::bind(&as::io_service::run, &io_));
 
   // Start an asynchronous receive
-  ip::udp::endpoint ep;
+  asip::udp::endpoint ep;
   uint8_t data[kMaxCommandBufferSize] = "";
   socket_->async_receive_from(
     as::buffer(data), ep,
@@ -366,7 +423,7 @@ void FakeLivoxWidget::onRead(
   }
 
   // Start an asynchronous receive
-  ip::udp::endpoint ep;
+  asip::udp::endpoint ep;
   uint8_t next[kMaxCommandBufferSize] = "";
   socket_->async_receive_from(
     as::buffer(next), ep,
@@ -401,7 +458,7 @@ void FakeLivoxWidget::handleGeneralHandshake(SdkPacket * packet)
   std::cout << "IP: " << ip << " Data Port: " << req->data_port << " Cmd Port: " << req->cmd_port
             << " IMU Port: " << req->sensor_port << std::endl;
 
-  user_ip_ = ip::address_v4::from_string(ip);
+  user_ip_ = asip::address_v4::from_string(ip);
   data_port_ = req->data_port;
   cmd_port_ = req->cmd_port;
 
@@ -418,7 +475,7 @@ void FakeLivoxWidget::handleGeneralHandshake(SdkPacket * packet)
   // Disablesending of broadcast messages
   socket_->set_option(as::socket_base::broadcast(false));
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
 }
 
@@ -436,7 +493,7 @@ void FakeLivoxWidget::handleUGeneralDeviceInfo(SdkPacket * packet)
   payload.firmware_version[0] = 0x06;
   payload.firmware_version[1] = 0x08;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(DeviceInformationResponse));
 }
 
@@ -471,7 +528,7 @@ void FakeLivoxWidget::handleGeneralHeartbeat(SdkPacket * packet)
     payload.error_union.status_code.lidar_error_code.system_status = emit signal_get_system_status();
   }
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(HeartbeatResponse));
 }
 
@@ -490,8 +547,16 @@ void FakeLivoxWidget::handleGeneralControlSample(SdkPacket * packet)
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
   payload.ret_code = kReturnCodeSuccess;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
+
+  QString fileName = ui->lineEdit_pcap_path->text();
+  if (!fileName.isEmpty()) {
+    std::string str(fileName.toLocal8Bit());
+
+    // Start point cloud sampling
+    point_cloud_.start(str, model_->getFileter(), user_ip_, data_port_, loop_);
+  }
 }
 
 void FakeLivoxWidget::handleGeneralCoordinateSystem(SdkPacket * packet)
@@ -509,7 +574,7 @@ void FakeLivoxWidget::handleGeneralCoordinateSystem(SdkPacket * packet)
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
   payload.ret_code = kReturnCodeSuccess;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
 }
 
@@ -528,7 +593,7 @@ void FakeLivoxWidget::handleLidarSetPointCloudReturnMode(SdkPacket * packet)
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
   payload.ret_code = kReturnCodeSuccess;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
 }
 
@@ -547,11 +612,11 @@ void FakeLivoxWidget::handleLidarSetImuPushFrequency(SdkPacket * packet)
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
   payload.ret_code = kReturnCodeSuccess;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
 }
 
-void FakeLivoxWidget::send(ip::udp::endpoint ep, SdkPacket * packet, uint8_t * payload, uint16_t payload_size)
+void FakeLivoxWidget::send(asip::udp::endpoint ep, SdkPacket * packet, uint8_t * payload, uint16_t payload_size)
 {
   packet->sof = kSdkProtocolSof;
   packet->length = sizeof(SdkPacket) - 1 + payload_size + kSdkPacketCrcSize;
@@ -596,7 +661,7 @@ void FakeLivoxWidget::sendGeneralBroadcast()
   snprintf(payload.broadcast_code, kBroadcastCodeSize, "%s", emit signal_get_broadcast_code().toStdString().c_str());
   payload.dev_type = kDeviceTypeLidarHorizon;
 
-  ip::udp::endpoint ep = ip::udp::endpoint(ip::address_v4::broadcast(), 55000);
+  asip::udp::endpoint ep = asip::udp::endpoint(asip::address_v4::broadcast(), 55000);
   send(ep, &out, ptr, sizeof(BroadcastDeviceInfo));
 }
 
@@ -624,7 +689,7 @@ void FakeLivoxWidget::sendPushAbnormalStatus()
   payload.time_sync_status = emit signal_get_time_sync_status();
   payload.system_status = emit signal_get_system_status();
 
-  ip::udp::endpoint ep = ip::udp::endpoint(user_ip_, cmd_port_);
+  asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(LidarErrorCode));
 }
 
@@ -647,4 +712,110 @@ void FakeLivoxWidget::updateSystemStatus()
     default:
       break;
   }
+}
+
+void FakeLivoxWidget::readPcap(const QString & fileName)
+{
+  if (!fileName.isEmpty()) {
+    std::string str(fileName.toLocal8Bit());
+
+    // Get packet count from pcap
+    int ret = getPcapPacketCount(str.c_str());
+    if (ret < 0) return;
+    packet_count_ = ret;
+
+    // Get packet data from pcap
+    ret = getPcapPacketData(str.c_str());
+    if (ret < 0) return;
+  }
+}
+
+int FakeLivoxWidget::getPcapPacketCount(const char * fname)
+{
+  // Open a saved capture file for reading
+  char errbuf[PCAP_ERRBUF_SIZE];
+  pcap_ = pcap_open_offline(fname, errbuf);
+  if (!pcap_) {
+    QMessageBox msgBox(QMessageBox::Critical, "Error", errbuf, QMessageBox::Ok, this);
+    msgBox.exec();
+    return -1;
+  }
+
+  // Read the next packet from a pcap_t
+  const u_char * p;
+  struct pcap_pkthdr h;
+  int count = 0;
+  while ((p = pcap_next(pcap_, &h))) {
+    ++count;
+  }
+  // Close a capture device or savefile
+  pcap_close(pcap_);
+
+  return count;
+}
+
+int FakeLivoxWidget::getPcapPacketData(const char * fname)
+{
+  QProgressDialog progress("Reading file...", "Cancel", 0, packet_count_, this);
+  progress.setWindowTitle("PCAP");
+  progress.setWindowModality(Qt::WindowModal);
+  progress.show();
+
+  // Open a saved capture file for reading
+  char errbuf[PCAP_ERRBUF_SIZE];
+  pcap_ = pcap_open_offline(fname, errbuf);
+  if (!pcap_) {
+    QMessageBox msgBox(QMessageBox::Critical, "Error", errbuf, QMessageBox::Ok, this);
+    msgBox.exec();
+    return -1;
+  }
+
+  model_->removeAll();
+
+  // Read the next packet from a pcap_t
+  const u_char * p;
+  struct pcap_pkthdr h;
+  int i = 0;
+  while ((p = pcap_next(pcap_, &h))) {
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    progress.setLabelText(QString("Packet processed: %1").arg(i + 1));
+    progress.setValue(i);
+
+    if (h.caplen >= sizeof(struct iphdr) + sizeof(struct ether_header)) {
+      const u_char * ptr = p;
+      ptr += sizeof(struct ether_header);
+      const struct iphdr * ip = reinterpret_cast<const struct iphdr *>(ptr);
+      if (ip->protocol == IPPROTO_UDP && !IN_MULTICAST(ntohl(ip->daddr))) {
+        ptr += ((struct iphdr *)ptr)->ihl * 4;
+        const struct udphdr * udp = (struct udphdr *)(ptr);
+        addUDPInfo(ip, udp);
+      }
+    }
+
+    if (progress.wasCanceled()) break;
+
+    ++i;
+  }
+
+  progress.setValue(packet_count_);
+
+  // Close a capture device or savefile
+  pcap_close(pcap_);
+
+  return i;
+}
+
+void FakeLivoxWidget::addUDPInfo(const struct iphdr * ip, const struct udphdr * udp)
+{
+  bool found = false;
+  char saddr[64];
+  char daddr[64];
+
+  inet_ntop(AF_INET, &ip->saddr, saddr, sizeof(saddr));
+  inet_ntop(AF_INET, &ip->daddr, daddr, sizeof(daddr));
+  int sport = ntohs(udp->source);
+  int dport = ntohs(udp->dest);
+
+  UDPInfo info(tr(saddr), sport, tr(daddr), dport, 1);
+  model_->add(info);
 }

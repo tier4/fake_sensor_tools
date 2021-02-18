@@ -12,11 +12,13 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(Qt5Widgets REQUIRED)
-
+find_package(fmt REQUIRED)
 
 set(rqt_fake_livox_SRCS
   src/rqt_fake_livox/rqt_fake_livox.cpp
   src/rqt_fake_livox/rqt_fake_livox_widget.cpp
+  src/rqt_fake_livox/udp_list_model.cpp
+  src/rqt_fake_livox/fake_point_cloud.cpp
   src/third_party/FastCRC/FastCRC_tables.hpp
   src/third_party/FastCRC/FastCRCsw.cpp
 )
@@ -61,7 +63,7 @@ qt5_add_resources(rqt_fake_livox_RS_H ${rqt_fake_livox_RS})
 include_directories(${rqt_fake_livox_INCLUDE_DIRECTORIES} ${catkin_INCLUDE_DIRS} ${QWT_INCLUDE_DIR})
 add_library(${PROJECT_NAME} ${rqt_fake_livox_SRCS} ${rqt_fake_livox_MOCS} ${rqt_fake_livox_UIS_H} ${rqt_fake_livox_RS_H})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${QWT_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets pcap fmt)
 find_package(class_loader)
 class_loader_hide_library_symbols(${PROJECT_NAME})
 

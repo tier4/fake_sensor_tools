@@ -23,14 +23,21 @@
 #define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_
 
 #include <stdint.h>
-#include <boost/asio.hpp>
 #include <map>
 #include <string>
 #include <vector>
 
-#include <FastCRC.h>
-#include <livox.h>
+#include <netinet/ip.h>
+#include <netinet/udp.h>
+#include <pcap/pcap.h>
+#include <boost/asio.hpp>
+
 #include <QWidget>
+
+#include <FastCRC.h>
+#include <fake_point_cloud.h>
+#include <livox.h>
+#include <udp_list_model.h>
 
 /**
  * @brief CMD Set & CMD ID.
@@ -54,7 +61,7 @@ struct CMD_SET_ID
 };
 
 namespace as = boost::asio;
-namespace ip = boost::asio::ip;
+namespace asip = boost::asio::ip;
 
 namespace Ui
 {
@@ -88,6 +95,30 @@ public:
    * @return Broadcast code
    */
   QString getBroadcastCode();
+
+  /**
+   * @brief Set path of pcap file.
+   * @param [in] pcap_path path of pcap file
+   */
+  void setPcapPath(const QString & pcap_path);
+
+  /**
+   * @brief Get path of pcap file.
+   * @return path of pcap file
+   */
+  QString getPcapPath();
+
+  /**
+   * @brief Set loop playback of pcap.
+   * @param [in] pcap_path loop playback
+   */
+  void setPcapLoop(bool pcap_loop);
+
+  /**
+   * @brief Get loop playback of pcap.
+   * @return loop playback
+   */
+  bool getPcapLoop();
 
   /**
    * @brief Start UDP communication.
@@ -232,6 +263,28 @@ private slots:
    * @param [in] checked true if the button is checked, or false if the button is unchecked
    */
   void on_radioButton_firmware_status_1_toggled(bool checked);
+
+  /**
+   * @brief This signal is emitted when the button is activated
+   */
+  void on_pushButton_pcap_path_clicked();
+
+  /**
+   * @brief This signal is emitted when the button is activated
+   */
+  void on_pushButton_pcap_read_clicked();
+
+  /**
+   * @brief This signal is emitted whenever a checkable button changes its state.
+   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   */
+  void on_pushButton_pcap_loop_toggled(bool checked);
+
+  /**
+   * @brief This signal is emitted when a mouse button is double-clicked.
+   * @param [in] index specified index
+   */
+  void on_tableView_pcap_packets_doubleClicked(const QModelIndex & index);
 
   /**
    * @brief Get Return Code thread-safely.
@@ -547,7 +600,7 @@ private:
    * @param payload Pointer to payload
    * @param payload_size Size of payload
    */
-  void send(ip::udp::endpoint ep, SdkPacket * packet, uint8_t * payload, uint16_t payload_size);
+  void send(asip::udp::endpoint ep, SdkPacket * packet, uint8_t * payload, uint16_t payload_size);
 
   /**
    * @brief Send broadcast command.
@@ -564,9 +617,36 @@ private:
    */
   void updateSystemStatus();
 
+  /**
+   * @brief Read pcap.
+   * @param[in] fileName the name of the file to open
+   */
+  void readPcap(const QString & fileName);
+
+  /**
+   * @brief Get packet count from pcap.
+   * @param[in] fname the name of the file to open
+   * @return packet count on success, -1 on failure.
+   */
+  int getPcapPacketCount(const char * fname);
+
+  /**
+   * @brief Get packet data from pcap.
+   * @param[in] fname the name of the file to open
+   * @return packet count on success, -1 on failure.
+   */
+  int getPcapPacketData(const char * fname);
+
+  /**
+   * @brief Add UDP information.
+   * @param[in] ip a pointer to header of ip
+   * @param[in] udp a pointer to header of udp
+   */
+  void addUDPInfo(const struct iphdr * ip, const struct udphdr * udp);
+
   Ui::FakeLivoxWidget * ui;                              //!< @brief UI
   as::io_service io_;                                    //!< @brief facilities of custom asynchronous services
-  boost::shared_ptr<ip::udp::socket> socket_;            //!< @brief socket
+  boost::shared_ptr<asip::udp::socket> socket_;          //!< @brief socket
   pthread_mutex_t mutex_stop_;                           //!< @brief mutex to protect access to stop_thread
   pthread_t th_;                                         //!< @brief thread handle
   pthread_t * th_ptr_;                                   //!< @brief pointer to thread handle
@@ -574,10 +654,15 @@ private:
   static std::map<CMD_SET_ID, HANDLE_FUNC> handle_map_;  //!< @brief message handler map
   FastCRC16 crc16_;                                      //!< @brief 16-BIT CRC
   FastCRC32 crc32_;                                      //!< @brief 32-BIT CRC
-  ip::address_v4 user_ip_;                               //!< @brief Host IPAddress
+  asip::address_v4 user_ip_;                             //!< @brief Host IPAddress
   uint16_t data_port_;                                   //!< @brief Host Point Cloud Data UDP Destination Port
   uint16_t cmd_port_;                                    //!< @brief Host Control Command UDP Destination Port
   std::map<std::string, int> status_codes_;              //!< @brief LiDAR status_codes
+  pcap_t * pcap_;                                        //!< @brief Descriptor of an open capture instance
+  int packet_count_;                                     //!< @brief packet count in pcap
+  UDPListModel * model_;                                 //!< @brief list model for UDP information
+  FakePointCloud point_cloud_;                           //!< @brief Fake point cloud sampling class
+  bool loop_;                                            //!< @brief loop playback
 };
 
 #endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_
