@@ -25,7 +25,7 @@
 
 #include <rqt_fake_livox/fake_point_cloud.h>
 
-FakePointCloud::FakePointCloud() : mutex_stop_(), stop_thread_(false), th_ptr_(nullptr), loop_(false) {}
+FakePointCloud::FakePointCloud() : stop_thread_(false), th_ptr_(nullptr), loop_(false) {}
 
 FakePointCloud::~FakePointCloud() {}
 
@@ -65,9 +65,10 @@ int FakePointCloud::start(
 
 void FakePointCloud::stop()
 {
-  pthread_mutex_lock(&mutex_stop_);
-  stop_thread_ = true;
-  pthread_mutex_unlock(&mutex_stop_);
+  {
+    std::lock_guard<std::mutex> lock(mutex_stop_);
+    stop_thread_ = true;
+  }
   if (th_ptr_ != nullptr) {
     pthread_join(th_, NULL);
     th_ptr_ = nullptr;
@@ -82,11 +83,10 @@ void * FakePointCloud::thread()
   boost::thread thr_io(boost::bind(&as::io_service::run, &io_));
 
   while (true) {
-    bool b;
-    pthread_mutex_lock(&mutex_stop_);
-    b = stop_thread_;
-    pthread_mutex_unlock(&mutex_stop_);
-    if (b) break;
+    {
+      std::lock_guard<std::mutex> lock(mutex_stop_);
+      if (stop_thread_) break;
+    }
 
     // Open pcap file
     if (openPcap() != 0) break;
@@ -148,11 +148,10 @@ void FakePointCloud::performPcap()
 
   // Read the next packet from a pcap_t
   while ((p = pcap_next(pcap_, &h))) {
-    bool b;
-    pthread_mutex_lock(&mutex_stop_);
-    b = stop_thread_;
-    pthread_mutex_unlock(&mutex_stop_);
-    if (b) break;
+    {
+      std::lock_guard<std::mutex> lock(mutex_stop_);
+      if (stop_thread_) break;
+    }
 
     // Wait packet time
     packetTimer(h.ts, reset);

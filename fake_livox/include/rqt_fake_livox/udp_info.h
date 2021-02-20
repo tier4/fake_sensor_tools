@@ -19,8 +19,7 @@
  * @brief UDP info class
  */
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_INFO_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_INFO_H_
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -126,5 +125,3 @@ private:
   int packet_count_;        //!< @brief number of packets
   bool transmit_;           //!< @brief transmit or not
 };
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_INFO_H_

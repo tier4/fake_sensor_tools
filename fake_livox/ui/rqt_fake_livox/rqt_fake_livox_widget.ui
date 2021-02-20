@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1549</width>
-    <height>1012</height>
+    <height>1054</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>756</height>
+        <height>798</height>
        </rect>
       </property>
       <attribute name="label">
@@ -229,7 +229,7 @@ background-repeat: none;
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>756</height>
+        <height>798</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -417,7 +417,7 @@ QRadioButton::unchecked {
           </rect>
          </property>
          <property name="text">
-          <string>Status Code can be set using the settings of &quot;Push Abnormal Status&quot;.</string>
+          <string>Status Code can be set using the settings of &quot;LiDAR Status Code&quot;.</string>
          </property>
         </widget>
        </widget>
@@ -509,7 +509,7 @@ background-repeat: none;
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>756</height>
+        <height>798</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -572,7 +572,7 @@ QRadioButton::unchecked {
 #radioButton_system_status_2 {  spacing: 120px; }</string>
       </property>
       <attribute name="label">
-       <string>Push Abnormal Status</string>
+       <string>LiDAR Status Code</string>
       </attribute>
       <widget class="QWidget" name="formLayoutWidget_5">
        <property name="geometry">
@@ -1341,7 +1341,7 @@ QRadioButton::unchecked {
         <x>0</x>
         <y>0</y>
         <width>1513</width>
-        <height>756</height>
+        <height>798</height>
        </rect>
       </property>
       <attribute name="label">

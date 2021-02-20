@@ -19,14 +19,15 @@
  * @brief Fake point cloud sampling class
  */
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_FAKE_POINT_CLOUD_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_FAKE_POINT_CLOUD_H_
+#pragma once
+
+#include <mutex>
+#include <string>
 
 #include <netinet/ip.h>
 #include <netinet/udp.h>
 #include <pcap/pcap.h>
 #include <boost/asio.hpp>
-#include <string>
 
 namespace as = boost::asio;
 namespace asip = boost::asio::ip;
@@ -106,7 +107,7 @@ private:
 
   as::io_service io_;                            //!< @brief facilities of custom asynchronous services
   boost::shared_ptr<asip::udp::socket> socket_;  //!< @brief socket
-  pthread_mutex_t mutex_stop_;                   //!< @brief mutex to protect access to stop_thread
+  std::mutex mutex_stop_;                        //!< @brief mutex to protect access to stop_thread
   pthread_t th_;                                 //!< @brief thread handle
   pthread_t * th_ptr_;                           //!< @brief pointer to thread handle
   bool stop_thread_;                             //!< @brief flag to stop thread
@@ -117,5 +118,3 @@ private:
   std::string pcap_filter_;                      //!< @brief filter program for pcap
   bool loop_;                                    //!< @brief loop playback
 };
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_FAKE_POINT_CLOUD_H_

@@ -22,8 +22,7 @@
 // SOFTWARE.
 //
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_LIVOX_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_LIVOX_H_
+#pragma once
 
 static const uint32_t kMaxCommandBufferSize = 1536;  //!< @brief The maximum buffer size of command
 const uint8_t kSdkProtocolSof = 0xAA;                //!< @brief Starting Byte, Fixed to be0xAA
@@ -122,9 +121,10 @@ typedef enum {
 #define SamplingToString(X) \
   (((X) == kStopSampling) ? "Stop Sampling" : ((X) == kStartSampling) ? "Start Sampling" : "?")
 
-#define CoordinateTypeToString(X)                         \
-  (((X) == kCoordinateCartesian) ? "Cartesian Coordinate" \
-                                 : ((X) == kCoordinateSpherical) ? "Spherical Coordinate" : "?")
+#define CoordinateTypeToString(X)                           \
+  (((X) == kCoordinateCartesian)   ? "Cartesian Coordinate" \
+   : ((X) == kCoordinateSpherical) ? "Spherical Coordinate" \
+                                   : "?")
 
 /**
  * @brief Enum that represents the command id.
@@ -161,10 +161,11 @@ typedef enum {
   kImuFreq200Hz,  //!< @brief IMU push frequency 200Hz.
 } ImuFreq;
 
-#define PointCloudReturnModeToString(X) \
-  (((X) == kFirstReturn)                \
-     ? "Single Return First"            \
-     : ((X) == kStrongestReturn) ? "Single Return Strongest" : ((X) == kDualReturn) ? "Dual Return" : "?")
+#define PointCloudReturnModeToString(X)                    \
+  (((X) == kFirstReturn)       ? "Single Return First"     \
+   : ((X) == kStrongestReturn) ? "Single Return Strongest" \
+   : ((X) == kDualReturn)      ? "Dual Return"             \
+                               : "?")
 
 #define ImuFreqToString(X) (((X) == kImuFreq0Hz) ? "0Hz(Close IMU push)" : ((X) == kImuFreq200Hz) ? "200Hz" : "?")
 
@@ -312,5 +313,3 @@ typedef struct
 } SetImuPushFrequencyRequest;
 
 #pragma pack()
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_LIVOX_H_

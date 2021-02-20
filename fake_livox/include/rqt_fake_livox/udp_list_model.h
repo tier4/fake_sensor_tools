@@ -19,8 +19,7 @@
  * @brief UDP list model class
  */
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_LIST_MODEL_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_LIST_MODEL_H_
+#pragma once
 
 #include <udp_info.h>
 #include <string>
@@ -122,5 +121,3 @@ public:
 private:
   std::vector<UDPInfo> list_;  //!< @brief list of UDP packet information
 };
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_UDP_LIST_MODEL_H_

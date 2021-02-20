@@ -19,49 +19,18 @@
  * @brief RQt plugin widget class
  */
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_
+#pragma once
 
-#include <stdint.h>
+#include <pcap/pcap.h>
 #include <map>
 #include <string>
-#include <vector>
 
-#include <netinet/ip.h>
-#include <netinet/udp.h>
-#include <pcap/pcap.h>
-#include <boost/asio.hpp>
-
+#include <QButtonGroup>
 #include <QWidget>
 
-#include <FastCRC.h>
 #include <fake_point_cloud.h>
-#include <livox.h>
+#include <sdk_protocol.h>
 #include <udp_list_model.h>
-
-/**
- * @brief CMD Set & CMD ID.
- */
-struct CMD_SET_ID
-{
-  uint8_t cmd_set_;
-  uint8_t cmd_id_;
-
-  CMD_SET_ID() : cmd_set_(0), cmd_id_(0) {}
-
-  CMD_SET_ID(uint8_t cmd_set, uint8_t cmd_id) : cmd_set_(cmd_set), cmd_id_(cmd_id) {}
-
-  bool operator<(const CMD_SET_ID & value) const
-  {
-    if (cmd_set_ == value.cmd_set_) {
-      return cmd_id_ < value.cmd_id_;
-    }
-    return cmd_set_ < value.cmd_set_;
-  }
-};
-
-namespace as = boost::asio;
-namespace asip = boost::asio::ip;
 
 namespace Ui
 {
@@ -120,18 +89,12 @@ public:
    */
   bool getPcapLoop();
 
-  /**
-   * @brief Start UDP communication.
-   * @return 0 on success, otherwise error
-   */
-  int start();
-
-  /**
-   * @brief Stop UDP communication.
-   */
-  void stop();
-
 private slots:
+  /**
+   * @brief This signal is emitted when the Return or Enter key is pressed or the line edit loses focus.
+   */
+  void on_lineEdit_broadcast_code_editingFinished();
+
   /**
    * @brief This signal is emitted whenever a checkable button changes its state.
    * @param [in] checked true if the button is checked, or false if the button is unchecked
@@ -139,22 +102,34 @@ private slots:
   void on_pushButton_comm_toggled(bool checked);
 
   /**
-   * @brief Get broadcast code thread-safely.
-   * @return Broadcast code
+   * @brief This signal is emitted whenever a checkable button changes its state.
+   * @param [in] checked true if the button is checked, or false if the button is unchecked
    */
-  QString get_broadcast_code();
+  void on_pushButton_checksum_error_toggled(bool checked);
 
   /**
-   * @brief Get Checksum error thread-safely.
-   * @return Checksum error
+   * @brief This signal is emitted whenever a checkable button changes its state.
+   * @param [in] checked true if the button is checked, or false if the button is unchecked
    */
-  bool get_checksum_error();
+  void on_pushButton_debug_output_toggled(bool checked);
 
   /**
-   * @brief Get Debug output thread-safely.
-   * @return Debug output
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  bool get_debug_output();
+  void onButtonGroupReturnCodeClicked(int id);
+
+  /**
+   * @brief This signal is emitted whenever a checkable button changes its state.
+   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   */
+  void on_pushButton_rain_fog_suppression_switch_toggled(bool checked);
+
+  /**
+   * @brief This signal is emitted when the value shown in the progress bar changes. value is the new value shown by the progress bar.
+   * @param[in] value progress bar's current value
+   */
+  void on_slider_initialization_progress_valueChanged(double value);
 
   /**
    * @brief This signal is emitted whenever a checkable button changes its state.
@@ -163,106 +138,76 @@ private slots:
   void on_comboBox_lidar_state_currentIndexChanged(int index);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_temp_status_0_toggled(bool checked);
+  void onButtonGroupTempStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_temp_status_1_toggled(bool checked);
+  void onButtonGroupVoltStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_temp_status_2_toggled(bool checked);
+  void onButtonGroupMotorStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_volt_status_0_toggled(bool checked);
+  void onButtonGroupDirtyWarnClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_volt_status_1_toggled(bool checked);
+  void onButtonGroupFirmwareStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_volt_status_2_toggled(bool checked);
+  void onButtonGroupPpsStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_motor_status_0_toggled(bool checked);
+  void onButtonGroupDeviceStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_motor_status_1_toggled(bool checked);
+  void onButtonGroupFanStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_motor_status_2_toggled(bool checked);
+  void onButtonGroupSelfHeatingClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_dirty_warn_0_toggled(bool checked);
+  void onButtonGroupPtpStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_dirty_warn_1_toggled(bool checked);
+  void onButtonGroupTimeSyncStatusClicked(int id);
 
   /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   * @brief This signal is emitted when the button is activated
+   * @param[in] id id
    */
-  void on_radioButton_device_status_0_toggled(bool checked);
-
-  /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
-   */
-  void on_radioButton_device_status_1_toggled(bool checked);
-
-  /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
-   */
-  void on_radioButton_fan_status_0_toggled(bool checked);
-
-  /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
-   */
-  void on_radioButton_fan_status_1_toggled(bool checked);
-
-  /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
-   */
-  void on_radioButton_firmware_status_0_toggled(bool checked);
-
-  /**
-   * @brief This signal is emitted whenever a checkable button changes its state.
-   * @param [in] checked true if the button is checked, or false if the button is unchecked
-   */
-  void on_radioButton_firmware_status_1_toggled(bool checked);
+  void onButtonGroupSystemStatusClicked(int id);
 
   /**
    * @brief This signal is emitted when the button is activated
@@ -286,336 +231,25 @@ private slots:
    */
   void on_tableView_pcap_packets_doubleClicked(const QModelIndex & index);
 
-  /**
-   * @brief Get Return Code thread-safely.
-   * @return Return Code
-   */
-  int get_return_code();
-
-  /**
-   * @brief Get LiDAR State thread-safely.
-   * @return LiDAR State
-   */
-  int get_lidar_state();
-
-  /**
-   * @brief Get Rain/Fog Suppression Switch thread-safely.
-   * @return Rain/Fog Suppression Switch
-   */
-  int get_rain_fog_suppression_switch();
-
-  /**
-   * @brief Get Initialization Progress thread-safely.
-   * @return Initialization Progress
-   */
-  int get_initialization_progress();
-
-  /**
-   * @brief Get temp_status thread-safely.
-   * @return temp_status
-   */
-  int get_temp_status();
-
-  /**
-   * @brief Get volt_status thread-safely.
-   * @return volt_status
-   */
-  int get_volt_status();
-
-  /**
-   * @brief Get motor_status thread-safely.
-   * @return volt_status
-   */
-  int get_motor_status();
-
-  /**
-   * @brief Get dirty_warn thread-safely.
-   * @return dirty_warn
-   */
-  int get_dirty_warn();
-
-  /**
-   * @brief Get firmware_status thread-safely.
-   * @return firmware_status
-   */
-  int get_firmware_status();
-
-  /**
-   * @brief Get pps_status thread-safely.
-   * @return pps_status
-   */
-  int get_pps_status();
-
-  /**
-   * @brief Get device_status thread-safely.
-   * @return device_status
-   */
-  int get_device_status();
-
-  /**
-   * @brief Get fan_status thread-safely.
-   * @return fan_status
-   */
-  int get_fan_status();
-
-  /**
-   * @brief Get self_heating thread-safely.
-   * @return self_heating
-   */
-  int get_self_heating();
-
-  /**
-   * @brief Get ptp_status thread-safely.
-   * @return ptp_status
-   */
-  int get_ptp_status();
-
-  /**
-   * @brief Get time_sync_status thread-safely.
-   * @return time_sync_status
-   */
-  int get_time_sync_status();
-
-  /**
-   * @brief Get get_system_status thread-safely.
-   * @return get_system_status
-   */
-  int get_system_status();
-
-Q_SIGNALS:
-  /**
-   * @brief Get broadcast code thread-safely.
-   * @return Broadcast code
-   */
-  QString signal_get_broadcast_code();
-
-  /**
-   * @brief Get Checksum error thread-safely.
-   * @return Checksum error
-   */
-  bool signal_get_checksum_error();
-
-  /**
-   * @brief Get Debug output thread-safely.
-   * @return Debug output
-   */
-  bool signal_get_debug_output();
-
-  /**
-   * @brief Get Return Code thread-safely.
-   * @return Return Code
-   */
-  int signal_get_return_code();
-
-  /**
-   * @brief Get LiDAR State thread-safely.
-   * @return LiDAR State
-   */
-  int signal_get_lidar_state();
-
-  /**
-   * @brief Get Rain/Fog Suppression Switch thread-safely.
-   * @return Rain/Fog Suppression Switch
-   */
-  int signal_get_rain_fog_suppression_switch();
-
-  /**
-   * @brief Get Initialization Progress thread-safely.
-   * @return Initialization Progress
-   */
-  int signal_get_initialization_progress();
-
-  /**
-   * @brief Get temp_status thread-safely.
-   * @return temp_status
-   */
-  int signal_get_temp_status();
-
-  /**
-   * @brief Get volt_status thread-safely.
-   * @return volt_status
-   */
-  int signal_get_volt_status();
-
-  /**
-   * @brief Get motor_status thread-safely.
-   * @return volt_status
-   */
-  int signal_get_motor_status();
-
-  /**
-   * @brief Get dirty_warn thread-safely.
-   * @return dirty_warn
-   */
-  int signal_get_dirty_warn();
-
-  /**
-   * @brief Get firmware_status thread-safely.
-   * @return firmware_status
-   */
-  int signal_get_firmware_status();
-
-  /**
-   * @brief Get pps_status thread-safely.
-   * @return pps_status
-   */
-  int signal_get_pps_status();
-
-  /**
-   * @brief Get device_status thread-safely.
-   * @return device_status
-   */
-  int signal_get_device_status();
-
-  /**
-   * @brief Get fan_status thread-safely.
-   * @return fan_status
-   */
-  int signal_get_fan_status();
-
-  /**
-   * @brief Get self_heating thread-safely.
-   * @return self_heating
-   */
-  int signal_get_self_heating();
-
-  /**
-   * @brief Get ptp_status thread-safely.
-   * @return ptp_status
-   */
-  int signal_get_ptp_status();
-
-  /**
-   * @brief Get time_sync_status thread-safely.
-   * @return time_sync_status
-   */
-  int signal_get_time_sync_status();
-
-  /**
-   * @brief Get get_system_status thread-safely.
-   * @return get_system_status
-   */
-  int signal_get_system_status();
-
 private:
   /**
-   * @brief I/O direction.
+   * @brief Callback for Start/Stop Sampling.
+   * @param[in] request Start/Stop Sampling
+   * @param[in] user_ip Host IPAddress
+   * @param[in] data_port Host Point Cloud Data UDP Destination Port
    */
-  enum Direction {
-    Read = 0,
-    Write,
-  };
-
-  typedef void (FakeLivoxWidget::*HANDLE_FUNC)(SdkPacket * packet);  //!< @brief message handler
-
-  /**
-   * @brief Thread helper funcion.
-   * @param [in] arg Argument
-   */
-  static void * threadHelper(void * arg) { return reinterpret_cast<FakeLivoxWidget *>(arg)->thread(); }
+  void onControlSampleRequest(
+    const ControlSampleRequest * request, const asip::address_v4 & user_ip, uint16_t data_port);
 
   /**
-   * @brief Thread loop.
-   * @return nullptr
+   * @brief Add radio button to group.
    */
-  void * thread();
-
-  /**
-   * @brief Dump sent/received Data.
-   * @param [in] dir I/O direction
-   * @param [in] data Pointer to data
-   * @param [in] size Size of data
-   */
-  void dump(Direction dir, const uint8_t * data, std::size_t size);
-
-  /**
-   * @brief Handler to be called when the read operation completes.
-   * @param [in] error Error argument of a handler
-   * @param [in] bytes_transfered Bytes transferred argument of a handler
-   * @param [inout] data Received data
-   */
-  void onRead(const boost::system::error_code & error, std::size_t bytes_transfered, const uint8_t * data);
-
-  /**
-   * @brief Handler to be called when the write operation completes.
-   * @param [in] error Error argument of a handler
-   * @param [in] bytes_transfered Bytes transferred argument of a handler
-   * @param [inout] data Sent data
-   */
-  void onWrite(
-    const boost::system::error_code & error, std::size_t bytes_transfered, const std::vector<uint8_t> & data);
-
-  /**
-   * @brief Handle sdk packet.
-   * @param[in] packet Received packet
-   */
-  void handleSdkPacket(SdkPacket * packet);
-
-  /**
-   * @brief Handle handshake command.
-   * @param[in] packet Received packet
-   */
-  void handleGeneralHandshake(SdkPacket * packet);
-
-  /**
-   * @brief Handle query the information of device.
-   * @param[in] packet Received packet
-   */
-  void handleUGeneralDeviceInfo(SdkPacket * packet);
-
-  /**
-   * @brief Handle heartbeat command.
-   * @param[in] packet Received packet
-   */
-  void handleGeneralHeartbeat(SdkPacket * packet);
-
-  /**
-   * @brief Handle Start/Stop Sampling.
-   * @param[in] packet Received packet
-   */
-  void handleGeneralControlSample(SdkPacket * packet);
-
-  /**
-   * @brief Handle coordinate of point cloud data.
-   * @param[in] packet Received packet
-   */
-  void handleGeneralCoordinateSystem(SdkPacket * packet);
-
-  /**
-   * @brief Handle set point cloud return mode of a LiDAR.
-   * @param[in] packet Received packet
-   */
-  void handleLidarSetPointCloudReturnMode(SdkPacket * packet);
-
-  /**
-   * @brief Handle set IMU push frequency of a LiDAR.
-   * @param[in] packet Received packet
-   */
-  void handleLidarSetImuPushFrequency(SdkPacket * packet);
-
-  /**
-   * @brief Send data.
-   * @param ep Endpoint
-   * @param packet Pointer to protocol frame
-   * @param payload Pointer to payload
-   * @param payload_size Size of payload
-   */
-  void send(asip::udp::endpoint ep, SdkPacket * packet, uint8_t * payload, uint16_t payload_size);
-
-  /**
-   * @brief Send broadcast command.
-   */
-  void sendGeneralBroadcast();
-
-  /**
-   * @brief Send Push Abnormal Status.
-   */
-  void sendPushAbnormalStatus();
+  void addButtonGroup();
 
   /**
    * @brief Update system_status.
    */
-  void updateSystemStatus();
+  void updateSystemStatus(int level);
 
   /**
    * @brief Read pcap.
@@ -644,25 +278,13 @@ private:
    */
   void addUDPInfo(const struct iphdr * ip, const struct udphdr * udp);
 
-  Ui::FakeLivoxWidget * ui;                              //!< @brief UI
-  as::io_service io_;                                    //!< @brief facilities of custom asynchronous services
-  boost::shared_ptr<asip::udp::socket> socket_;          //!< @brief socket
-  pthread_mutex_t mutex_stop_;                           //!< @brief mutex to protect access to stop_thread
-  pthread_t th_;                                         //!< @brief thread handle
-  pthread_t * th_ptr_;                                   //!< @brief pointer to thread handle
-  bool stop_thread_;                                     //!< @brief flag to stop thread
-  static std::map<CMD_SET_ID, HANDLE_FUNC> handle_map_;  //!< @brief message handler map
-  FastCRC16 crc16_;                                      //!< @brief 16-BIT CRC
-  FastCRC32 crc32_;                                      //!< @brief 32-BIT CRC
-  asip::address_v4 user_ip_;                             //!< @brief Host IPAddress
-  uint16_t data_port_;                                   //!< @brief Host Point Cloud Data UDP Destination Port
-  uint16_t cmd_port_;                                    //!< @brief Host Control Command UDP Destination Port
-  std::map<std::string, int> status_codes_;              //!< @brief LiDAR status_codes
-  pcap_t * pcap_;                                        //!< @brief Descriptor of an open capture instance
-  int packet_count_;                                     //!< @brief packet count in pcap
-  UDPListModel * model_;                                 //!< @brief list model for UDP information
-  FakePointCloud point_cloud_;                           //!< @brief Fake point cloud sampling class
-  bool loop_;                                            //!< @brief loop playback
+  Ui::FakeLivoxWidget * ui;                   //!< @brief UI
+  QButtonGroup * buttonGroup_system_status_;  //!< @brief QButtonGroup
+  std::map<std::string, int> status_codes_;   //!< @brief LiDAR status_codes
+  pcap_t * pcap_;                             //!< @brief Descriptor of an open capture instance
+  int packet_count_;                          //!< @brief packet count in pcap
+  UDPListModel * model_;                      //!< @brief list model for UDP information
+  SDKProtocol sdk_protocol_;                  //!< @brief Handling SDK protocol class
+  FakePointCloud point_cloud_;                //!< @brief Fake point cloud sampling class
+  bool loop_;                                 //!< @brief loop playback
 };
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_WIDGET_H_

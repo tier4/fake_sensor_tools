@@ -19,8 +19,7 @@
  * @brief RQt plugin class
  */
 
-#ifndef FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_H_
-#define FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_H_
+#pragma once
 
 #include <rqt_gui_cpp/plugin.h>
 #include <std_msgs/String.h>
@@ -53,9 +52,7 @@ public:
    * @param [in] plugin_settings The plugin-specific settings
    * @param [in] instance_settings The instance-specific settings
    */
-  void saveSettings(
-    qt_gui_cpp::Settings & plugin_settings,
-    qt_gui_cpp::Settings & instance_settings) const override;
+  void saveSettings(qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const override;
 
   /**
    * Restore the intrinsic state of the plugin from the plugin-specific or instance-specific settings.
@@ -63,13 +60,10 @@ public:
    * @param [in] instance_settings The instance-specific settings
    */
   void restoreSettings(
-    const qt_gui_cpp::Settings & plugin_settings,
-    const qt_gui_cpp::Settings & instance_settings) override;
+    const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings) override;
 
 private:
   FakeLivoxWidget * widget = nullptr;  //!< @brief RQt plugin widget class
 };
 
 }  // namespace rqt_fake_livox
-
-#endif  // FAKE_LIVOX_INCLUDE_RQT_FAKE_LIVOX_RQT_FAKE_LIVOX_H_

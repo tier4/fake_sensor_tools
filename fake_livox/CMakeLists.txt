@@ -15,10 +15,11 @@ find_package(Qt5Widgets REQUIRED)
 find_package(fmt REQUIRED)
 
 set(rqt_fake_livox_SRCS
+  src/rqt_fake_livox/fake_point_cloud.cpp
   src/rqt_fake_livox/rqt_fake_livox.cpp
   src/rqt_fake_livox/rqt_fake_livox_widget.cpp
+  src/rqt_fake_livox/sdk_protocol.cpp
   src/rqt_fake_livox/udp_list_model.cpp
-  src/rqt_fake_livox/fake_point_cloud.cpp
   src/third_party/FastCRC/FastCRC_tables.hpp
   src/third_party/FastCRC/FastCRCsw.cpp
 )
