@@ -348,10 +348,12 @@ void FakeLivoxWidget::getNetworkInterfaces()
   int ret = ioctl(sock, SIOCGIFCONF, &ifc);
   if (ret != 0) {
     std::cout << "Failed to get array of ifreq structures length. " << strerror(errno) << std::endl;
+    ::close(sock);
     return;
   }
   if (ifc.ifc_len < 0) {
     std::cout << "No ifreq structures." << std::endl;
+    ::close(sock);
     return;
   }
 
@@ -360,6 +362,8 @@ void FakeLivoxWidget::getNetworkInterfaces()
   ret = ioctl(sock, SIOCGIFCONF, &ifc);
   if (ret != 0) {
     std::cout << "Failed to get list of interface. " << strerror(errno) << std::endl;
+    ::close(sock);
+    free(ifc.ifc_ifcu.ifcu_buf);
     return;
   }
 
@@ -375,7 +379,7 @@ void FakeLivoxWidget::getNetworkInterfaces()
     ret = ioctl(sock, SIOCGIFADDR, &ifr);
     if (ret != 0) {
       std::cout << "Failed to get interface address. " << strerror(errno) << std::endl;
-      return;
+      break;
     }
 
     char * addr = inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
