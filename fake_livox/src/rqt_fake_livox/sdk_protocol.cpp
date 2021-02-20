@@ -42,12 +42,6 @@ SDKProtocol::SDKProtocol()
 
 SDKProtocol::~SDKProtocol() {}
 
-void SDKProtocol::setBroadcastCode(const std::string & broadcast_code)
-{
-  std::lock_guard<std::mutex> lock(mutex_config_);
-  broadcast_code_ = broadcast_code;
-}
-
 void SDKProtocol::setLidarStatus(const LidarStatus & name, int value)
 {
   std::lock_guard<std::mutex> lock(mutex_config_);
@@ -61,9 +55,11 @@ int SDKProtocol::getSystemStatus()
   return status_[LidarStatus::SystemStatus].value;
 }
 
-int SDKProtocol::start()
+int SDKProtocol::start(const asip::address_v4 & livox_ip, const std::string & broadcast_code)
 {
   int ret = 0;
+
+  broadcast_code_ = broadcast_code;
 
   // Preparation for a subsequent run() invocation
   io_.reset();
@@ -76,7 +72,7 @@ int SDKProtocol::start()
     socket_->set_option(asip::udp::socket::reuse_address(true));
     // Permit sending of broadcast messages
     socket_->set_option(as::socket_base::broadcast(true));
-    asip::udp::endpoint ep = asip::udp::endpoint(asip::address_v4::any(), 65000);
+    asip::udp::endpoint ep = asip::udp::endpoint(livox_ip, 65000);
     socket_->bind(ep);
   } catch (const boost::system::system_error & e) {
     ret = ENOENT;
@@ -130,12 +126,6 @@ void * SDKProtocol::thread()
   }
 
   return nullptr;
-}
-
-const std::string & SDKProtocol::getBroadcastCode()
-{
-  std::lock_guard<std::mutex> lock(mutex_config_);
-  return broadcast_code_;
 }
 
 void SDKProtocol::initLidarStatus()
@@ -199,12 +189,12 @@ void SDKProtocol::onTimer(const boost::system::error_code & error)
   timer_->async_wait(boost::bind(&SDKProtocol::onTimer, this, as::placeholders::error));
 }
 
-void SDKProtocol::onRead(const boost::system::error_code & error, std::size_t bytes_transfered, const uint8_t * data)
+void SDKProtocol::onRead(const boost::system::error_code & error, std::size_t bytes_transferred, const uint8_t * data)
 {
   if (error) return;
 
   if (getLidarStatus(LidarStatus::DebugOutput)) {
-    dump(Read, data, bytes_transfered);
+    dump(Read, data, bytes_transferred);
   }
 
   SdkPacket * packet = const_cast<SdkPacket *>(reinterpret_cast<const SdkPacket *>(data));
@@ -219,12 +209,12 @@ void SDKProtocol::onRead(const boost::system::error_code & error, std::size_t by
 }
 
 void SDKProtocol::onWrite(
-  const boost::system::error_code & error, std::size_t bytes_transfered, const std::vector<uint8_t> & data)
+  const boost::system::error_code & error, std::size_t bytes_transferred, const std::vector<uint8_t> & data)
 {
   if (error) return;
 
   if (getLidarStatus(LidarStatus::DebugOutput)) {
-    dump(Write, &data[0], bytes_transfered);
+    dump(Write, &data[0], bytes_transferred);
   }
 }
 
@@ -444,7 +434,7 @@ void SDKProtocol::sendGeneralBroadcast()
 
   BroadcastDeviceInfo payload = {};
   uint8_t * ptr = reinterpret_cast<uint8_t *>(&payload);
-  snprintf(payload.broadcast_code, kBroadcastCodeSize, "%s", getBroadcastCode().c_str());
+  snprintf(payload.broadcast_code, kBroadcastCodeSize, "%s", broadcast_code_.c_str());
   payload.dev_type = kDeviceTypeLidarHorizon;
 
   asip::udp::endpoint ep = asip::udp::endpoint(asip::address_v4::broadcast(), 55000);

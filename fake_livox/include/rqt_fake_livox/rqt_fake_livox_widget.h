@@ -24,6 +24,7 @@
 #include <pcap/pcap.h>
 #include <map>
 #include <string>
+#include <vector>
 
 #include <QButtonGroup>
 #include <QWidget>
@@ -31,6 +32,14 @@
 #include <fake_point_cloud.h>
 #include <sdk_protocol.h>
 #include <udp_list_model.h>
+
+struct NetworkInterface
+{
+  std::string ifname;
+  asip::address_v4 address;
+
+  NetworkInterface(const std::string & name, const asip::address_v4 & addr) : ifname(name), address(addr) {}
+};
 
 namespace Ui
 {
@@ -63,7 +72,7 @@ public:
    * @brief Get broadcast code.
    * @return Broadcast code
    */
-  QString getBroadcastCode();
+  QString getBroadcastCode() const;
 
   /**
    * @brief Set path of pcap file.
@@ -75,7 +84,7 @@ public:
    * @brief Get path of pcap file.
    * @return path of pcap file
    */
-  QString getPcapPath();
+  QString getPcapPath() const;
 
   /**
    * @brief Set loop playback of pcap.
@@ -87,14 +96,21 @@ public:
    * @brief Get loop playback of pcap.
    * @return loop playback
    */
-  bool getPcapLoop();
+  bool getPcapLoop() const;
+
+  /**
+   * @brief Set network interface.
+   * @param[in] interface network interface
+   */
+  void setNetworkInterface(const QString & interface);
+
+  /**
+   * @brief Get network interface.
+   * @return network interface
+   */
+  QString getNetworkInterface() const;
 
 private slots:
-  /**
-   * @brief This signal is emitted when the Return or Enter key is pressed or the line edit loses focus.
-   */
-  void on_lineEdit_broadcast_code_editingFinished();
-
   /**
    * @brief This signal is emitted whenever a checkable button changes its state.
    * @param [in] checked true if the button is checked, or false if the button is unchecked
@@ -247,6 +263,11 @@ private:
   void addButtonGroup();
 
   /**
+   * @brief Enumerate network interface.
+   */
+  void getNetworkInterfaces();
+
+  /**
    * @brief Update system_status.
    */
   void updateSystemStatus(int level);
@@ -278,13 +299,14 @@ private:
    */
   void addUDPInfo(const struct iphdr * ip, const struct udphdr * udp);
 
-  Ui::FakeLivoxWidget * ui;                   //!< @brief UI
-  QButtonGroup * buttonGroup_system_status_;  //!< @brief QButtonGroup
-  std::map<std::string, int> status_codes_;   //!< @brief LiDAR status_codes
-  pcap_t * pcap_;                             //!< @brief Descriptor of an open capture instance
-  int packet_count_;                          //!< @brief packet count in pcap
-  UDPListModel * model_;                      //!< @brief list model for UDP information
-  SDKProtocol sdk_protocol_;                  //!< @brief Handling SDK protocol class
-  FakePointCloud point_cloud_;                //!< @brief Fake point cloud sampling class
-  bool loop_;                                 //!< @brief loop playback
+  Ui::FakeLivoxWidget * ui;                     //!< @brief UI
+  QButtonGroup * buttonGroup_system_status_;    //!< @brief QButtonGroup
+  std::map<std::string, int> status_codes_;     //!< @brief LiDAR status_codes
+  pcap_t * pcap_;                               //!< @brief Descriptor of an open capture instance
+  int packet_count_;                            //!< @brief packet count in pcap
+  UDPListModel * model_;                        //!< @brief list model for UDP information
+  SDKProtocol sdk_protocol_;                    //!< @brief Handling SDK protocol class
+  FakePointCloud point_cloud_;                  //!< @brief Fake point cloud sampling class
+  bool loop_;                                   //!< @brief loop playback
+  std::vector<NetworkInterface> network_list_;  //!< @brief list of network interface
 };

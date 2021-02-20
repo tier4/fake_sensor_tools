@@ -75,12 +75,6 @@ public:
   ~SDKProtocol();
 
   /**
-   * @brief Set broadcast code.
-   * @param[in] broadcast_code Broadcast code
-   */
-  void setBroadcastCode(const std::string & broadcast_code);
-
-  /**
    * @brief Set LiDAR status.
    * @param[in] name name of LiDAR status
    * @param[in] value value of LiDAR status
@@ -105,9 +99,11 @@ public:
 
   /**
    * @brief Start UDP communication.
+   * @param[in] livox_ip_ IP address of Livox
+   * @param[in] broadcast_code Broadcast code
    * @return 0 on success, otherwise error
    */
-  int start();
+  int start(const asip::address_v4 & livox_ip, const std::string & broadcast_code);
 
   /**
    * @brief Stop UDP communication.
@@ -138,19 +134,13 @@ private:
   void * thread();
 
   /**
-   * @brief Get broadcast code thread-safely.
-   * @return Broadcast code
-   */
-  const std::string & getBroadcastCode();
-
-  /**
    * @brief Initialize LiDAR status.
    */
   void initLidarStatus();
 
   /**
    * @brief Get LiDAR status thread-safely.
-   * @param[in] name name of LiDAR atatus
+   * @param[in] name name of LiDAR status
    * @return value of LiDAR status
    */
   int getLidarStatus(const LidarStatus & name);
@@ -177,19 +167,19 @@ private:
   /**
    * @brief Handler to be called when the read operation completes.
    * @param [in] error Error argument of a handler
-   * @param [in] bytes_transfered Bytes transferred argument of a handler
+   * @param [in] bytes_transferred Bytes transferred argument of a handler
    * @param [inout] data Received data
    */
-  void onRead(const boost::system::error_code & error, std::size_t bytes_transfered, const uint8_t * data);
+  void onRead(const boost::system::error_code & error, std::size_t bytes_transferred, const uint8_t * data);
 
   /**
    * @brief Handler to be called when the write operation completes.
    * @param [in] error Error argument of a handler
-   * @param [in] bytes_transfered Bytes transferred argument of a handler
+   * @param [in] bytes_transferred Bytes transferred argument of a handler
    * @param [inout] data Sent data
    */
   void onWrite(
-    const boost::system::error_code & error, std::size_t bytes_transfered, const std::vector<uint8_t> & data);
+    const boost::system::error_code & error, std::size_t bytes_transferred, const std::vector<uint8_t> & data);
 
   /**
    * @brief Handle sdk packet.
@@ -271,5 +261,5 @@ private:
   std::mutex mutex_config_;                   //!< @brief mutex to protect access to configuration
   std::string broadcast_code_;                //!< @brief Broadcast code
   std::map<LidarStatus, LidarValue> status_;  //!< @brief LiDAR status
-  ControlSampleRequestCallback callback_;
+  ControlSampleRequestCallback callback_;     //!< @brief callback
 };

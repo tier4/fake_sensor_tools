@@ -109,9 +109,9 @@ QVariant UDPListModel::headerData(int section, Qt::Orientation orientation, int 
 
 void UDPListModel::add(const UDPInfo & info)
 {
-  for (auto itr = list_.begin(); itr != list_.end(); ++itr) {
-    if (*itr == info) {
-      itr->incrementPacketCount();
+  for (auto & list_info : list_) {
+    if (list_info == info) {
+      list_info.incrementPacketCount();
       return;
     }
   }
@@ -131,12 +131,12 @@ std::string UDPListModel::getFileter()
 {
   std::string ret = "";
 
-  for (auto itr = list_.begin(); itr != list_.end(); ++itr) {
-    if (itr->getTransmit()) {
+  for (const auto & info : list_) {
+    if (info.getTransmit()) {
       if (!ret.empty()) ret += " or ";
       ret += fmt::format(
-        "(src {} and src port {} and dst {} and dst port {})", itr->getSourceAddress().toStdString(),
-        itr->getSourcePort(), itr->getDestAddress().toStdString(), itr->getDestPort());
+        "(src {} and src port {} and dst {} and dst port {})", info.getSourceAddress().toStdString(),
+        info.getSourcePort(), info.getDestAddress().toStdString(), info.getDestPort());
     }
   }
   return ret;

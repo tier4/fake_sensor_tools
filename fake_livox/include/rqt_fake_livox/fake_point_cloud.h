@@ -101,7 +101,7 @@ private:
   /**
    * @brief Wait packet time.
    * @param t time
-   * @param reset falg to reset
+   * @param reset flag to reset
    */
   void packetTimer(struct timeval t, int reset);
 

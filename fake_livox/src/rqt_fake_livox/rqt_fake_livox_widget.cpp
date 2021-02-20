@@ -19,6 +19,7 @@
  * @brief RQt plugin widget class
  */
 
+#include <fmt/format.h>
 #include <net/ethernet.h>
 #include <boost/thread.hpp>
 #include <iostream>
@@ -50,6 +51,9 @@ FakeLivoxWidget::FakeLivoxWidget(QWidget * parent) : QWidget(parent), ui(new Ui:
   ui->tableView_pcap_packets->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
   sdk_protocol_.setCallback(boost::bind(&FakeLivoxWidget::onControlSampleRequest, this, _1, _2, _3));
+
+  // Enumerate network interface
+  getNetworkInterfaces();
 }
 
 FakeLivoxWidget::~FakeLivoxWidget() { delete ui; }
@@ -57,29 +61,42 @@ FakeLivoxWidget::~FakeLivoxWidget() { delete ui; }
 void FakeLivoxWidget::setBroadcastCode(const QString & broadcast_code)
 {
   ui->lineEdit_broadcast_code->setText(broadcast_code);
-  sdk_protocol_.setBroadcastCode(broadcast_code.toStdString());
 }
 
-QString FakeLivoxWidget::getBroadcastCode() { return ui->lineEdit_broadcast_code->text(); }
+QString FakeLivoxWidget::getBroadcastCode() const { return ui->lineEdit_broadcast_code->text(); }
 
 void FakeLivoxWidget::setPcapPath(const QString & pcap_path) { ui->lineEdit_pcap_path->setText(pcap_path); }
 
-QString FakeLivoxWidget::getPcapPath() { return ui->lineEdit_pcap_path->text(); }
+QString FakeLivoxWidget::getPcapPath() const { return ui->lineEdit_pcap_path->text(); }
 
 void FakeLivoxWidget::setPcapLoop(bool pcap_loop) { ui->pushButton_pcap_loop->setChecked(pcap_loop); }
 
-bool FakeLivoxWidget::getPcapLoop() { return loop_; }
+bool FakeLivoxWidget::getPcapLoop() const { return loop_; }
 
-void FakeLivoxWidget::on_lineEdit_broadcast_code_editingFinished()
+void FakeLivoxWidget::setNetworkInterface(const QString & interface)
 {
-  sdk_protocol_.setBroadcastCode(getBroadcastCode().toStdString());
+  int i = 0;
+  for (const auto & network : network_list_) {
+    if (network.ifname == interface.toStdString()) {
+      ui->comboBox_network_interface->setCurrentIndex(i);
+      break;
+    }
+    ++i;
+  }
+}
+
+QString FakeLivoxWidget::getNetworkInterface() const
+{
+  return network_list_[ui->comboBox_network_interface->currentIndex()].ifname.c_str();
 }
 
 void FakeLivoxWidget::on_pushButton_comm_toggled(bool checked)
 {
   if (checked) {
     // Start UDP communication
-    sdk_protocol_.start();
+    const asip::address_v4 address = network_list_[ui->comboBox_network_interface->currentIndex()].address;
+    const std::string broadcast_code = ui->lineEdit_broadcast_code->text().toStdString();
+    sdk_protocol_.start(address, broadcast_code);
   } else {
     // Stop UDP communication
     sdk_protocol_.stop();
@@ -235,7 +252,7 @@ void FakeLivoxWidget::onControlSampleRequest(
 
   QString fileName = ui->lineEdit_pcap_path->text();
   if (!fileName.isEmpty()) {
-    std::string str(fileName.toLocal8Bit());
+    const std::string str(fileName.toLocal8Bit());
 
     // Start point cloud sampling
     point_cloud_.start(str, model_->getFileter(), user_ip, data_port, loop_);
@@ -316,6 +333,60 @@ void FakeLivoxWidget::addButtonGroup()
   buttonGroup_system_status_->addButton(ui->radioButton_system_status_1, 1);
   buttonGroup_system_status_->addButton(ui->radioButton_system_status_2, 2);
   connect(buttonGroup_system_status_, SIGNAL(buttonClicked(int)), this, SLOT(onButtonGroupSystemStatusClicked(int)));
+}
+
+void FakeLivoxWidget::getNetworkInterfaces()
+{
+  int sock = socket(AF_INET, SOCK_DGRAM, 0);
+  if (sock < 0) {
+    std::cout << "Failed to create a new socket. " << strerror(errno) << std::endl;
+    return;
+  }
+
+  // Get array of ifreq structures length in bytes
+  struct ifconf ifc = {0};
+  int ret = ioctl(sock, SIOCGIFCONF, &ifc);
+  if (ret != 0) {
+    std::cout << "Failed to get array of ifreq structures length. " << strerror(errno) << std::endl;
+    return;
+  }
+  if (ifc.ifc_len < 0) {
+    std::cout << "No ifreq structures." << std::endl;
+    return;
+  }
+
+  // Get list of interface
+  ifc.ifc_ifcu.ifcu_buf = (caddr_t)malloc(ifc.ifc_len);
+  ret = ioctl(sock, SIOCGIFCONF, &ifc);
+  if (ret != 0) {
+    std::cout << "Failed to get list of interface. " << strerror(errno) << std::endl;
+    return;
+  }
+
+  int num = ifc.ifc_len / sizeof(struct ifreq);
+  struct ifreq * ifr = (struct ifreq *)ifc.ifc_ifcu.ifcu_buf;
+
+  for (int i = 0; i < num; ++i) {
+    char * name = ifr[i].ifr_name;
+
+    // Get interface address
+    struct ifreq ifr;
+    strncpy(ifr.ifr_name, name, IFNAMSIZ - 1);
+    ret = ioctl(sock, SIOCGIFADDR, &ifr);
+    if (ret != 0) {
+      std::cout << "Failed to get interface address. " << strerror(errno) << std::endl;
+      return;
+    }
+
+    char * addr = inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+    network_list_.emplace_back(name, asip::address_v4::from_string(addr));
+
+    std::string item = fmt::format("{} / {}", name, addr);
+    ui->comboBox_network_interface->addItem(item.c_str());
+  }
+
+  ::close(sock);
+  free(ifc.ifc_ifcu.ifcu_buf);
 }
 
 void FakeLivoxWidget::updateSystemStatus(int level) { buttonGroup_system_status_->button(level)->setChecked(true); }
