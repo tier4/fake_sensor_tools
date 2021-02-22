@@ -111,6 +111,7 @@
 QLabel { color: Ivory;  font: 12pt &quot;Ubuntu&quot;; }
 QLineEdit { color: DarkSlateGrey; background-color: Gainsboro; font: 12pt &quot;Ubuntu&quot;; }
 QComboBox { color: DarkSlateGrey; background-color: Gainsboro; font: 12pt &quot;Ubuntu&quot;; }
+QComboBox::disabled { color: LightGrey; background-color: DarkGray; font: 12pt &quot;Ubuntu&quot;; }
 QCheckBox { color: Ivory; font: 11pt &quot;Ubuntu&quot;; }
 QPushButton { color: DarkSlateGrey;  font: 11pt &quot;Ubuntu&quot;; border-color: Ivory; border-radius:8px; border-style:solid; border-width:4px; background-color: Gainsboro; padding: 4px 8px;}
 QRadioButton { color: Ivory; font: 9pt &quot;Ubuntu&quot;; }
@@ -342,10 +343,11 @@ background-repeat: none;
         </property>
         <property name="styleSheet">
          <string notr="true">QRadioButton {
-  padding: 5px 10px;
+  padding: 2px 2px;
   background-color: gainsboro; 
   border-radius: 12px;
   font:bold;
+  font-size: 12pt;
 }
 
 QRadioButton::indicator {
