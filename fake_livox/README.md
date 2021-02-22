@@ -4,7 +4,7 @@
 
 1. Enable Fake Livox plugin.
 
-- Choose from the menu: `Plugins`->`Fake Sensor Tools`->`Fake Livox`
+- Choose from the menu: `Plugins`->`Fake Sensor Tools`->`Fake Livox`<br>
   <img src="docs/readme_01.png" width="300" alt="rqt">
 
 2. Launch sensor driver.
@@ -124,7 +124,7 @@ Point cloud data and IMU data can be transmitted by using .pcap file.
 
 ### Select from list option
 
-You can apply packet filter. Check a checkbox or double click a table row.<br>(All UDP packets will be transmitted if none is selected.)
+You can apply packet filter. Check a checkbox or double click a table row.<br>(All UDP packets will be transmitted if none is selected.)<br>
 <img src="docs/readme_07.png" width="500" alt="Select from list">
 
 \*Multicast packets are filtered, not shown in the list, and not forwarded to the port.
@@ -158,7 +158,7 @@ rqt
 
    You can edit the text on the right of Livox image(text displayed as "Livox") so that it would be easier to understand which window is for which LiDAR.
 
-   The following example is for 3 LiDARs.
+   The following example is for 3 LiDARs.<br>
    <img src="docs/readme_08.png" width="600" alt="Example1">
 
 5. Specify a broadcast code in `Broadcast code` field.
@@ -166,8 +166,8 @@ rqt
 7. Read .pcap file.
 8. Select source address from `Source address`.
 
-   The following example is for 3 LiDARs.
+   The following example is for 3 LiDARs.<br>
    <img src="docs/readme_09.png" width="600" alt="Example2">
 
-   Here is an example for Livox Viewer.
+   Here is an example for Livox Viewer.<br>
    <img src="docs/readme_10.png" width="600" alt="Example3">
