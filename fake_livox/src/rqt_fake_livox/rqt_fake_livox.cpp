@@ -38,19 +38,25 @@ void FakeLivox::shutdownPlugin() {}
 
 void FakeLivox::saveSettings(qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
 {
+  instance_settings.setValue("name", widget->getName());
   instance_settings.setValue("broadcast_code", widget->getBroadcastCode());
   instance_settings.setValue("network_interface", widget->getNetworkInterface());
   instance_settings.setValue("pcap_path", widget->getPcapPath());
   instance_settings.setValue("pcap_loop", widget->getPcapLoop());
+  instance_settings.setValue("pcap_address", widget->getPcapSourceAddress());
+  instance_settings.setValue("pcap_list", widget->getPcapFromList());
 }
 
 void FakeLivox::restoreSettings(
   const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings)
 {
+  widget->setName(instance_settings.value("name", "Horizon").toString());
   widget->setBroadcastCode(instance_settings.value("broadcast_code", "100000000000000").toString());
   widget->setNetworkInterface(instance_settings.value("network_interface", "").toString());
   widget->setPcapPath(instance_settings.value("pcap_path", "").toString());
   widget->setPcapLoop(instance_settings.value("pcap_loop", true).toBool());
+  widget->setPcapSourceAddress(instance_settings.value("pcap_address", "").toString());
+  widget->setPcapFromList(instance_settings.value("pcap_list", false).toBool());
 }
 
 }  // end namespace rqt_fake_livox

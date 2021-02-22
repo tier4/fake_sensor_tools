@@ -116,8 +116,15 @@ public:
    * @brief Get filter program.
    * @return filter program
    */
-  std::string getFileter();
+  std::string getFilter();
+
+  /**
+   * @brief Set checkbox enabled or disabled.
+   * @param[in] enabled enabled
+   */
+  void setEnabled(bool enabled);
 
 private:
   std::vector<UDPInfo> list_;  //!< @brief list of UDP packet information
+  bool enabled_;               //!< @brief checkbox enabled or disabled
 };

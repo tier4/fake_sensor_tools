@@ -48,7 +48,9 @@ FakeLivoxWidget::FakeLivoxWidget(QWidget * parent) : QWidget(parent), ui(new Ui:
   model_ = new UDPListModel();
   ui->tableView_pcap_packets->setModel(model_);
   ui->tableView_pcap_packets->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableView_pcap_packets->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+  ui->tableView_pcap_packets->horizontalHeader()->resizeSection(0, 0);
+  ui->tableView_pcap_packets->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+  ui->tableView_pcap_packets->horizontalHeader()->setStretchLastSection(false);
 
   sdk_protocol_.setCallback(boost::bind(&FakeLivoxWidget::onControlSampleRequest, this, _1, _2, _3));
 
@@ -58,20 +60,16 @@ FakeLivoxWidget::FakeLivoxWidget(QWidget * parent) : QWidget(parent), ui(new Ui:
 
 FakeLivoxWidget::~FakeLivoxWidget() { delete ui; }
 
+void FakeLivoxWidget::setName(const QString & name) { ui->lineEdit_name->setText(name); }
+
+QString FakeLivoxWidget::getName() const { return ui->lineEdit_name->text(); }
+
 void FakeLivoxWidget::setBroadcastCode(const QString & broadcast_code)
 {
   ui->lineEdit_broadcast_code->setText(broadcast_code);
 }
 
 QString FakeLivoxWidget::getBroadcastCode() const { return ui->lineEdit_broadcast_code->text(); }
-
-void FakeLivoxWidget::setPcapPath(const QString & pcap_path) { ui->lineEdit_pcap_path->setText(pcap_path); }
-
-QString FakeLivoxWidget::getPcapPath() const { return ui->lineEdit_pcap_path->text(); }
-
-void FakeLivoxWidget::setPcapLoop(bool pcap_loop) { ui->pushButton_pcap_loop->setChecked(pcap_loop); }
-
-bool FakeLivoxWidget::getPcapLoop() const { return loop_; }
 
 void FakeLivoxWidget::setNetworkInterface(const QString & interface)
 {
@@ -89,6 +87,30 @@ QString FakeLivoxWidget::getNetworkInterface() const
 {
   return network_list_[ui->comboBox_network_interface->currentIndex()].ifname.c_str();
 }
+
+void FakeLivoxWidget::setPcapPath(const QString & pcap_path) { ui->lineEdit_pcap_path->setText(pcap_path); }
+
+QString FakeLivoxWidget::getPcapPath() const { return ui->lineEdit_pcap_path->text(); }
+
+void FakeLivoxWidget::setPcapLoop(bool pcap_loop) { ui->pushButton_pcap_loop->setChecked(pcap_loop); }
+
+bool FakeLivoxWidget::getPcapLoop() const { return loop_; }
+
+void FakeLivoxWidget::setPcapSourceAddress(const QString & source_address)
+{
+  if (!source_address.isEmpty()) {
+    ui->comboBox_source_address->addItem(source_address);
+  }
+}
+
+QString FakeLivoxWidget::getPcapSourceAddress() const { return ui->comboBox_source_address->currentText(); }
+
+void FakeLivoxWidget::setPcapFromList(bool pcap_from_list)
+{
+  ui->checkBox_select_from_list->setChecked(pcap_from_list);
+}
+
+bool FakeLivoxWidget::getPcapFromList() const { return ui->checkBox_select_from_list->isChecked(); }
 
 void FakeLivoxWidget::on_pushButton_comm_toggled(bool checked)
 {
@@ -241,6 +263,14 @@ void FakeLivoxWidget::on_tableView_pcap_packets_doubleClicked(const QModelIndex 
   ui->tableView_pcap_packets->update();
 }
 
+void FakeLivoxWidget::on_checkBox_select_from_list_toggled(bool checked)
+{
+  model_->setEnabled(checked);
+  ui->comboBox_source_address->setEnabled(!checked);
+  // Updates the area
+  ui->tableView_pcap_packets->update();
+}
+
 void FakeLivoxWidget::onControlSampleRequest(
   const ControlSampleRequest * request, const asip::address_v4 & user_ip, uint16_t data_port)
 {
@@ -255,7 +285,7 @@ void FakeLivoxWidget::onControlSampleRequest(
     const std::string str(fileName.toLocal8Bit());
 
     // Start point cloud sampling
-    point_cloud_.start(str, model_->getFileter(), user_ip, data_port, loop_);
+    point_cloud_.start(str, createFilter(), user_ip, data_port, loop_);
   }
 }
 
@@ -440,6 +470,7 @@ int FakeLivoxWidget::getPcapPacketData(const char * fname)
   QProgressDialog progress("Reading file...", "Cancel", 0, packet_count_, this);
   progress.setWindowTitle("PCAP");
   progress.setWindowModality(Qt::WindowModal);
+  progress.setFixedWidth(600);
   progress.show();
 
   // Open a saved capture file for reading
@@ -482,6 +513,9 @@ int FakeLivoxWidget::getPcapPacketData(const char * fname)
   // Close a capture device or savefile
   pcap_close(pcap_);
 
+  // Add source addresses to combo box.
+  addSourceAddresses();
+
   return i;
 }
 
@@ -498,4 +532,31 @@ void FakeLivoxWidget::addUDPInfo(const struct iphdr * ip, const struct udphdr * 
 
   UDPInfo info(tr(saddr), sport, tr(daddr), dport, 1);
   model_->add(info);
+}
+
+void FakeLivoxWidget::addSourceAddresses()
+{
+  // Get current text
+  QString current = getPcapSourceAddress();
+  ui->comboBox_source_address->clear();
+
+  for (int i = 0; i < model_->rowCount(); ++i) {
+    QVariant content = model_->data(model_->index(i, 1), Qt::DisplayRole);
+    QString address = content.toString();
+    if (ui->comboBox_source_address->findText(address) < 0) {
+      ui->comboBox_source_address->addItem(address);
+    }
+  }
+
+  if (!current.isEmpty()) ui->comboBox_source_address->setCurrentText(current);
+}
+
+std::string FakeLivoxWidget::createFilter()
+{
+  if (getPcapFromList()) {
+    return model_->getFilter();
+  }
+
+  std::string source = getPcapSourceAddress().toStdString();
+  return fmt::format("(src {} and src port 60001) or (src {} and src port 60003)", source, source);
 }

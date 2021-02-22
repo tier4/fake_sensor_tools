@@ -23,7 +23,7 @@
 
 #include <rqt_fake_livox/udp_list_model.h>
 
-UDPListModel::UDPListModel(QObject * parent) : QAbstractTableModel(parent) {}
+UDPListModel::UDPListModel(QObject * parent) : QAbstractTableModel(parent), enabled_(false) {}
 
 UDPListModel::~UDPListModel() {}
 
@@ -36,15 +36,18 @@ Qt::ItemFlags UDPListModel::flags(const QModelIndex & index) const
   return result;
 }
 
-int UDPListModel::columnCount(const QModelIndex & /*parent*/) const { return 6; }
+int UDPListModel::columnCount(const QModelIndex & parent) const { return 6; }
 
-int UDPListModel::rowCount(const QModelIndex & /*parent*/) const { return list_.size(); }
+int UDPListModel::rowCount(const QModelIndex & parent) const { return list_.size(); }
 
 QVariant UDPListModel::data(const QModelIndex & index, int role) const
 {
   if (index.isValid()) {
     if (role == Qt::CheckStateRole && index.column() == 0) {
-      return list_[index.row()].getTransmit();
+      if (enabled_) {
+        return list_[index.row()].getTransmit();
+      }
+      return QVariant();
     }
 
     if (role == Qt::DisplayRole) {
@@ -59,6 +62,15 @@ QVariant UDPListModel::data(const QModelIndex & index, int role) const
           return list_[index.row()].getDestPort();
         case 5:
           return list_[index.row()].getPacketCount();
+        default:
+          break;
+      }
+    } else if (role == Qt::TextAlignmentRole) {
+      switch (index.column()) {
+        case 2:
+        case 4:
+        case 5:
+          return QVariant(Qt::AlignRight | Qt::AlignVCenter);
         default:
           break;
       }
@@ -88,7 +100,7 @@ QVariant UDPListModel::headerData(int section, Qt::Orientation orientation, int 
   if (orientation == Qt::Horizontal) {
     switch (section) {
       case 0:
-        return tr("Transmit");
+        return tr("");
       case 1:
         return tr("Source address");
       case 2:
@@ -105,6 +117,8 @@ QVariant UDPListModel::headerData(int section, Qt::Orientation orientation, int 
   } else {
     return QVariant(section + 1);
   }
+
+  return QVariant();
 }
 
 void UDPListModel::add(const UDPInfo & info)
@@ -123,11 +137,14 @@ void UDPListModel::add(const UDPInfo & info)
 
 void UDPListModel::removeAll() { list_.clear(); }
 
-void UDPListModel::toggleTransmit(const QModelIndex & index) { list_[index.row()].toggleTransmit(); }
+void UDPListModel::toggleTransmit(const QModelIndex & index)
+{
+  if (enabled_) list_[index.row()].toggleTransmit();
+}
 
 bool UDPListModel::getTransmit(const QModelIndex & index) { return list_[index.row()].getTransmit(); }
 
-std::string UDPListModel::getFileter()
+std::string UDPListModel::getFilter()
 {
   std::string ret = "";
 
@@ -141,3 +158,5 @@ std::string UDPListModel::getFileter()
   }
   return ret;
 }
+
+void UDPListModel::setEnabled(bool enabled) { enabled_ = enabled; }

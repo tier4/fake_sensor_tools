@@ -63,6 +63,18 @@ public:
   ~FakeLivoxWidget();
 
   /**
+   * @brief Set name.
+   * @param [in] name name
+   */
+  void setName(const QString & name);
+
+  /**
+   * @brief Get name.
+   * @return name
+   */
+  QString getName() const;
+
+  /**
    * @brief Set broadcast code.
    * @param [in] broadcast_code Broadcast code
    */
@@ -73,6 +85,18 @@ public:
    * @return Broadcast code
    */
   QString getBroadcastCode() const;
+
+  /**
+   * @brief Set network interface.
+   * @param[in] interface network interface
+   */
+  void setNetworkInterface(const QString & interface);
+
+  /**
+   * @brief Get network interface.
+   * @return network interface
+   */
+  QString getNetworkInterface() const;
 
   /**
    * @brief Set path of pcap file.
@@ -99,16 +123,28 @@ public:
   bool getPcapLoop() const;
 
   /**
-   * @brief Set network interface.
-   * @param[in] interface network interface
+   * @brief Set source address to filter.
+   * @param [in] source_address source address to filter
    */
-  void setNetworkInterface(const QString & interface);
+  void setPcapSourceAddress(const QString & source_address);
 
   /**
-   * @brief Get network interface.
-   * @return network interface
+   * @brief Get source address to filter.
+   * @return source address
    */
-  QString getNetworkInterface() const;
+  QString getPcapSourceAddress() const;
+
+  /**
+   * @brief Set flag to filter by selecting from list.
+   * @param [in] pcap_from_list flag to filter by selecting from list
+   */
+  void setPcapFromList(bool pcap_from_list);
+
+  /**
+   * @brief Get flag to filter by selecting from list.
+   * @return flag to filter by selecting from list
+   */
+  bool getPcapFromList() const;
 
 private slots:
   /**
@@ -247,6 +283,12 @@ private slots:
    */
   void on_tableView_pcap_packets_doubleClicked(const QModelIndex & index);
 
+  /**
+   * @brief This signal is emitted whenever a checkable button changes its state.
+   * @param [in] checked true if the button is checked, or false if the button is unchecked
+   */
+  void on_checkBox_select_from_list_toggled(bool checked);
+
 private:
   /**
    * @brief Callback for Start/Stop Sampling.
@@ -298,6 +340,16 @@ private:
    * @param[in] udp a pointer to header of udp
    */
   void addUDPInfo(const struct iphdr * ip, const struct udphdr * udp);
+
+  /**
+   * Add source addresses to combo box.
+   */
+  void addSourceAddresses();
+
+  /**
+   * Create filter expression
+   */
+  std::string createFilter();
 
   Ui::FakeLivoxWidget * ui;                     //!< @brief UI
   QButtonGroup * buttonGroup_system_status_;    //!< @brief QButtonGroup
