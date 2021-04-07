@@ -1,4 +1,4 @@
-<library path="lib/librqt_fake_imu">
+<library path="rqt_fake_imu">
   <class name="FakeImu" type="rqt_fake_imu::FakeImu" base_class_type="rqt_gui_cpp::Plugin">
     <description>Simulate IMU outputs without real sensor.</description>
     <qtgui>

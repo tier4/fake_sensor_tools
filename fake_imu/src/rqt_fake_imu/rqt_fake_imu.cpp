@@ -21,8 +21,7 @@
 
 #include <rqt_fake_imu/rqt_fake_imu.h>
 
-#include <pluginlib/class_list_macros.h>
-#include <ros/master.h>
+#include <pluginlib/class_list_macros.hpp>
 
 namespace rqt_fake_imu
 {

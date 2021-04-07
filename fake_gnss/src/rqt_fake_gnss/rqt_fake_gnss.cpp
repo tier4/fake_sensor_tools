@@ -21,8 +21,7 @@
 
 #include <rqt_fake_gnss/rqt_fake_gnss.h>
 
-#include <pluginlib/class_list_macros.h>
-#include <ros/master.h>
+#include <pluginlib/class_list_macros.hpp>
 
 namespace rqt_fake_gnss
 {

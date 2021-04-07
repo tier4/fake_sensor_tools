@@ -1,4 +1,4 @@
-<library path="lib/librqt_fake_gnss">
+<library path="rqt_fake_gnss">
   <class name="FakeGnss" type="rqt_fake_gnss::FakeGnss" base_class_type="rqt_gui_cpp::Plugin">
     <description>Simulate GNSS outputs without real sensor.</description>
     <qtgui>

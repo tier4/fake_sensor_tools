@@ -1,18 +1,25 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(rqt_fake_gnss)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
-## Find catkin macros and libraries
-find_package(catkin REQUIRED COMPONENTS
-  rqt_gui
-  rqt_gui_cpp
-)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-## System dependencies are found with CMake's conventions
+# find dependencies
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+
+
+# further dependencies manually.
 find_package(Qt5Widgets REQUIRED)
-
+find_package(Boost REQUIRED COMPONENTS
+  thread
+)
 
 set(rqt_fake_gnss_SRCS
   src/rqt_fake_gnss/rqt_fake_gnss.cpp
@@ -39,13 +46,7 @@ set(rqt_fake_gnss_RS
 set(rqt_fake_gnss_INCLUDE_DIRECTORIES
   include
   include/rqt_fake_gnss
-  ${CMAKE_CURRENT_BINARY_DIR}
-)
-
-
-catkin_package(
-  LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS rqt_gui rqt_gui_cpp
+  ${rqt_gui_cpp_INCLUDE_DIRS}
 )
 
 file(GLOB QWT_INCLUDE_DIR "/usr/include/qwt")
@@ -55,42 +56,35 @@ qt5_wrap_cpp(rqt_fake_gnss_MOCS ${rqt_fake_gnss_moc_HDRS})
 qt5_wrap_ui(rqt_fake_gnss_UIS_H ${rqt_fake_gnss_UIS})
 qt5_add_resources (rqt_fake_gnss_RS_H ${rqt_fake_gnss_RS})
 
-include_directories(${rqt_fake_gnss_INCLUDE_DIRECTORIES} ${catkin_INCLUDE_DIRS} ${QWT_INCLUDE_DIR})
-add_library(${PROJECT_NAME} ${rqt_fake_gnss_SRCS} ${rqt_fake_gnss_MOCS} ${rqt_fake_gnss_UIS_H} ${rqt_fake_gnss_RS_H})
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${QWT_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
-find_package(class_loader)
-class_loader_hide_library_symbols(${PROJECT_NAME})
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+include_directories(${rqt_fake_gnss_INCLUDE_DIRECTORIES} ${QWT_INCLUDE_DIR})
+add_library(${PROJECT_NAME} SHARED ${rqt_fake_gnss_SRCS} ${rqt_fake_gnss_MOCS} ${rqt_fake_gnss_UIS_H} ${rqt_fake_gnss_RS_H})
+target_link_libraries(${PROJECT_NAME} ${QWT_LIBRARIES} ${rqt_gui_cpp_LIBRARIES} ${Boost_LIBRARIES} Qt5::Widgets)
 
 #############
 ## Install ##
 #############
 
-# all install targets should use catkin DESTINATION variables
-class_loader_hide_library_symbols(${PROJECT_NAME})
-
-install(FILES plugin.xml fake_gnss.qrc
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+install(FILES plugin.xml
+  DESTINATION share/${PROJECT_NAME}
 )
 
 install(TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
 )
 
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+install(DIRECTORY include/
+  DESTINATION include
 )
 
 install(DIRECTORY images/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/images
+  DESTINATION share/${PROJECT_NAME}/images
 )
+
+pluginlib_export_plugin_description_file(rqt_gui "plugin.xml")
+
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
+
+ament_package()

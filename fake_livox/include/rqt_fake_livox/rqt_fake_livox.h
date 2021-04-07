@@ -22,7 +22,6 @@
 #pragma once
 
 #include <rqt_gui_cpp/plugin.h>
-#include <std_msgs/String.h>
 
 #include <rqt_fake_livox/rqt_fake_livox_widget.h>
 

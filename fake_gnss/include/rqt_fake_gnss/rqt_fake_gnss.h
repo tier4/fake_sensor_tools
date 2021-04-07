@@ -23,7 +23,6 @@
 #define FAKE_GNSS_INCLUDE_RQT_FAKE_GNSS_RQT_FAKE_GNSS_H_
 
 #include <rqt_gui_cpp/plugin.h>
-#include <std_msgs/String.h>
 
 #include <rqt_fake_gnss/rqt_fake_gnss_widget.h>
 

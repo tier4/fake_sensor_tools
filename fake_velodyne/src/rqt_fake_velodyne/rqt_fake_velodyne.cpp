@@ -21,8 +21,7 @@
 
 #include <rqt_fake_velodyne/rqt_fake_velodyne.h>
 
-#include <pluginlib/class_list_macros.h>
-#include <ros/master.h>
+#include <pluginlib/class_list_macros.hpp>
 
 namespace rqt_fake_velodyne
 {
@@ -39,12 +38,14 @@ void FakeVelodyne::shutdownPlugin() {}
 void FakeVelodyne::saveSettings(
   qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
 {
+  (void)plugin_settings;
   instance_settings.setValue("address", widget->getAddress());
 }
 
 void FakeVelodyne::restoreSettings(
   const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings)
 {
+  (void)plugin_settings;
   widget->setAddress(instance_settings.value("address", "http://localhost:8000").toString());
 }
 

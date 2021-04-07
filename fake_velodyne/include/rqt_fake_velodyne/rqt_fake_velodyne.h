@@ -23,7 +23,6 @@
 #define FAKE_VELODYNE_INCLUDE_RQT_FAKE_VELODYNE_RQT_FAKE_VELODYNE_H_
 
 #include <rqt_gui_cpp/plugin.h>
-#include <std_msgs/String.h>
 
 #include <rqt_fake_velodyne/rqt_fake_velodyne_widget.h>
 

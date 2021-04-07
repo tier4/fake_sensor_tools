@@ -1,4 +1,4 @@
-<library path="lib/librqt_fake_velodyne">
+<library path="rqt_fake_velodyne">
   <class name="FakeVelodyne" type="rqt_fake_velodyne::FakeVelodyne" base_class_type="rqt_gui_cpp::Plugin">
     <description>Simulate Velodyne outputs without real sensor.</description>
     <qtgui>
