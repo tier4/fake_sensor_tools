@@ -11,6 +11,7 @@ The tools are used as RQt plugins.
 
 ```
 git clone git@github.com:tier4/fake_sensor_tools.git
+git checkout ros2
 ```
 
 2. Install `socat`.
