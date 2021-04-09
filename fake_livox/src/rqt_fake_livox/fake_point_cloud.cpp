@@ -25,7 +25,7 @@
 
 #include <rqt_fake_livox/fake_point_cloud.h>
 
-FakePointCloud::FakePointCloud() : stop_thread_(false), th_ptr_(nullptr), loop_(false) {}
+FakePointCloud::FakePointCloud() : th_ptr_(nullptr), stop_thread_(false), loop_(false) {}
 
 FakePointCloud::~FakePointCloud() {}
 

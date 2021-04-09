@@ -374,7 +374,7 @@ void FakeLivoxWidget::getNetworkInterfaces()
   }
 
   // Get array of ifreq structures length in bytes
-  struct ifconf ifc = {0};
+  struct ifconf ifc = {};
   int ret = ioctl(sock, SIOCGIFCONF, &ifc);
   if (ret != 0) {
     std::cout << "Failed to get array of ifreq structures length. " << strerror(errno) << std::endl;
@@ -521,7 +521,6 @@ int FakeLivoxWidget::getPcapPacketData(const char * fname)
 
 void FakeLivoxWidget::addUDPInfo(const struct iphdr * ip, const struct udphdr * udp)
 {
-  bool found = false;
   char saddr[64];
   char daddr[64];
 

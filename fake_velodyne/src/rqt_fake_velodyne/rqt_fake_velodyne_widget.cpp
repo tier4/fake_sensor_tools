@@ -32,8 +32,8 @@ FakeVelodyneWidget::FakeVelodyneWidget(QWidget * parent)
   ui(new Ui::FakeVelodyneWidget),
   mutex_stop_(),
   mutex_json_(),
-  stop_thread_(false),
-  th_ptr_(nullptr)
+  th_ptr_(nullptr),
+  stop_thread_(false)
 {
   ui->setupUi(this);
 
@@ -254,16 +254,16 @@ void FakeVelodyneWidget::on_slider_motor_rpm_setting_valueChanged(double value)
   pthread_mutex_unlock(&mutex_json_);
 }
 
-QString FakeVelodyneWidget::get_server_address(void) { return ui->lineEdit_address->text(); }
+QString FakeVelodyneWidget::get_server_address() { return ui->lineEdit_address->text(); }
 
 void FakeVelodyneWidget::setAddress(const QString & device_name)
 {
   ui->lineEdit_address->setText(device_name);
 }
 
-QString FakeVelodyneWidget::getAddress(void) { return ui->lineEdit_address->text(); }
+QString FakeVelodyneWidget::getAddress() { return ui->lineEdit_address->text(); }
 
-int FakeVelodyneWidget::start(void)
+int FakeVelodyneWidget::start()
 {
   int ret = 0;
   stop_thread_ = false;
@@ -272,7 +272,7 @@ int FakeVelodyneWidget::start(void)
   return ret;
 }
 
-void FakeVelodyneWidget::stop(void)
+void FakeVelodyneWidget::stop()
 {
   pthread_mutex_lock(&mutex_stop_);
   stop_thread_ = true;
@@ -281,7 +281,7 @@ void FakeVelodyneWidget::stop(void)
   th_ptr_ = nullptr;
 }
 
-void * FakeVelodyneWidget::thread(void)
+void * FakeVelodyneWidget::thread()
 {
   web::http::experimental::listener::http_listener listener(
     emit signal_get_server_address().toStdString());
@@ -331,7 +331,7 @@ void FakeVelodyneWidget::handleGet(http::http_request request)
   pthread_mutex_unlock(&mutex_json_);
 }
 
-void FakeVelodyneWidget::loadInfoJson(void)
+void FakeVelodyneWidget::loadInfoJson()
 {
   QFile file(":/data/info.json");
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -341,7 +341,7 @@ void FakeVelodyneWidget::loadInfoJson(void)
   ui->lineEdit_serial->setText(info_json_["serial"].as_string().c_str());
 }
 
-void FakeVelodyneWidget::loadDiagJson(void)
+void FakeVelodyneWidget::loadDiagJson()
 {
   QFile file(":/data/diag.json");
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -412,7 +412,7 @@ void FakeVelodyneWidget::loadDiagJson(void)
   ui->slider_bot_1_25v->setValue(bot_1_25v);
 }
 
-void FakeVelodyneWidget::loadStatusJson(void)
+void FakeVelodyneWidget::loadStatusJson()
 {
   QFile file(":/data/status.json");
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -428,7 +428,7 @@ void FakeVelodyneWidget::loadStatusJson(void)
   ui->pushButton_laser_state->setChecked(state == "On");
 }
 
-void FakeVelodyneWidget::loadSettingsJson(void)
+void FakeVelodyneWidget::loadSettingsJson()
 {
   QFile file(":/data/settings.json");
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))

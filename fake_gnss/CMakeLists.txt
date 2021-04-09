@@ -14,7 +14,6 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-
 # further dependencies manually.
 find_package(Qt5Widgets REQUIRED)
 find_package(Boost REQUIRED COMPONENTS

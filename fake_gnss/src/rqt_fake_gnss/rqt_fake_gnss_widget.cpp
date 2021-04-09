@@ -53,8 +53,8 @@ FakeGnssWidget::FakeGnssWidget(QWidget * parent)
   ui(new Ui::FakeGnssWidget),
   mutex_stop_(),
   mutex_port_(),
-  stop_thread_(false),
-  th_ptr_(nullptr)
+  th_ptr_(nullptr),
+  stop_thread_(false)
 {
   ui->setupUi(this);
 
@@ -129,24 +129,24 @@ void FakeGnssWidget::on_slider_tx_usage_valueChanged(double value)
   pthread_mutex_unlock(&mutex_port_);
 }
 
-bool FakeGnssWidget::get_checksum_error(void) { return ui->pushButton_checksum_error->isChecked(); }
+bool FakeGnssWidget::get_checksum_error() { return ui->pushButton_checksum_error->isChecked(); }
 
-bool FakeGnssWidget::get_debug_output(void) { return ui->pushButton_debug_output->isChecked(); }
+bool FakeGnssWidget::get_debug_output() { return ui->pushButton_debug_output->isChecked(); }
 
 int FakeGnssWidget::get_a_status() { return ui->comboBox_a_status->currentIndex(); }
 
 int FakeGnssWidget::get_jamming_state() { return ui->comboBox_jamming_state->currentIndex(); }
 
-int FakeGnssWidget::get_spoof_det_state(void) { ui->comboBox_spoof_det_state->currentIndex(); }
+int FakeGnssWidget::get_spoof_det_state() { return ui->comboBox_spoof_det_state->currentIndex(); }
 
 void FakeGnssWidget::setDeviceName(const QString & device_name)
 {
   ui->lineEdit_device_name->setText(device_name);
 }
 
-QString FakeGnssWidget::getDeviceName(void) { return ui->lineEdit_device_name->text(); }
+QString FakeGnssWidget::getDeviceName() { return ui->lineEdit_device_name->text(); }
 
-int FakeGnssWidget::start(void)
+int FakeGnssWidget::start()
 {
   int ret = 0;
 
@@ -169,7 +169,7 @@ int FakeGnssWidget::start(void)
   return ret;
 }
 
-void FakeGnssWidget::stop(void)
+void FakeGnssWidget::stop()
 {
   pthread_mutex_lock(&mutex_stop_);
   stop_thread_ = true;
@@ -180,7 +180,7 @@ void FakeGnssWidget::stop(void)
   io_.stop();
 }
 
-void * FakeGnssWidget::thread(void)
+void * FakeGnssWidget::thread()
 {
   boost::thread thr_io(boost::bind(&as::io_service::run, &io_));
 
@@ -204,7 +204,7 @@ void * FakeGnssWidget::thread(void)
   return nullptr;
 }
 
-void FakeGnssWidget::handlePeriodicTransmit(void)
+void FakeGnssWidget::handlePeriodicTransmit()
 {
   for (auto & p : periodic_map_) {
     if (p.second.rate_ > 0) {
@@ -254,6 +254,9 @@ void FakeGnssWidget::onWrite(
   const boost::system::error_code & error, std::size_t bytes_transfered,
   const std::vector<uint8_t> & data)
 {
+  (void)error;
+  (void)bytes_transfered;
+
   if (emit signal_get_debug_output()) {
     dump(Write, &data[0], bytes_transfered);
   }
@@ -276,6 +279,8 @@ void FakeGnssWidget::handleUbx(const uint8_t * data)
 // UBX-MON-VER
 void FakeGnssWidget::handleUbxMonVER(const uint8_t * data)
 {
+  (void)data;
+
   uint8_t d[] = {
     0xB5, 0x62, 0x0A, 0x04, 0xDC, 0x00, 0x45, 0x58, 0x54, 0x20, 0x43, 0x4F, 0x52, 0x45, 0x20, 0x31,
     0x2E, 0x30, 0x30, 0x20, 0x28, 0x36, 0x31, 0x62, 0x32, 0x64, 0x64, 0x29, 0x00, 0x00, 0x00, 0x00,
@@ -298,6 +303,8 @@ void FakeGnssWidget::handleUbxMonVER(const uint8_t * data)
 
 void FakeGnssWidget::handleUbxCfgPRT(const uint8_t * data)
 {
+  (void)data;
+
   uint8_t d[] = {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00,
                  0xC0, 0x08, 0x00, 0x00, 0x00, 0xE1, 0x00, 0x00, 0x07, 0x00,
                  0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xCD, 0xC3};
@@ -329,7 +336,7 @@ void FakeGnssWidget::sendUbxAck(bool ack, uint8_t message_class, uint8_t message
   send(data, sizeof(data));
 }
 
-void FakeGnssWidget::sendUbxNavSTATUS(void)
+void FakeGnssWidget::sendUbxNavSTATUS()
 {
   uint8_t d[] = {0xB5, 0x62, 0x01, 0x03, 0x10, 0x00, 0x38, 0x4A, 0x79, 0x17, 0x03, 0xDD,
                  0x00, 0x00, 0xC4, 0x05, 0x00, 0x00, 0xE6, 0x1C, 0x09, 0x00, 0xDA, 0xF0};
@@ -338,7 +345,7 @@ void FakeGnssWidget::sendUbxNavSTATUS(void)
   send(d, sizeof(d));
 }
 
-void FakeGnssWidget::sendUbxNavPVT(void)
+void FakeGnssWidget::sendUbxNavPVT()
 {
   uint8_t d[] = {0xB5, 0x62, 0x01, 0x07, 0x5C, 0x00, 0x50, 0x32, 0x20, 0x17, 0xE3, 0x07, 0x0A,
                  0x11, 0x0B, 0x2E, 0x08, 0x37, 0x0F, 0x00, 0x00, 0x00, 0x2E, 0x3A, 0x01, 0x00,
@@ -363,7 +370,7 @@ void FakeGnssWidget::sendUbxNavPVT(void)
   send(d, sizeof(d));
 }
 
-void FakeGnssWidget::sendUbxNavRELPOSNED(void)
+void FakeGnssWidget::sendUbxNavRELPOSNED()
 {
   uint8_t d[] = {0xB5, 0x62, 0x01, 0x3C, 0x40, 0x00, 0x01, 0x00, 0x00, 0x00, 0xB0, 0xAF,
                  0x47, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -375,7 +382,7 @@ void FakeGnssWidget::sendUbxNavRELPOSNED(void)
   send(d, sizeof(d));
 }
 
-void FakeGnssWidget::sendUbxMonHW(void)
+void FakeGnssWidget::sendUbxMonHW()
 {
   uint8_t d[] = {0xB5, 0x62, 0x0A, 0x09, 0x3C, 0x00, 0x00, 0xC4, 0x01, 0x00, 0x00, 0x28, 0x00, 0x00,
                  0x00, 0x00, 0x01, 0x00, 0xEF, 0xC7, 0x01, 0x00, 0x78, 0x00, 0x5C, 0x0A, 0x02, 0x01,
@@ -388,7 +395,7 @@ void FakeGnssWidget::sendUbxMonHW(void)
   send(d, sizeof(d));
 }
 
-void FakeGnssWidget::sendUbxMonCOMMS(void)
+void FakeGnssWidget::sendUbxMonCOMMS()
 {
   std::vector<uint8_t> d{0xB5, 0x62, 0x0A, 0x36, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};

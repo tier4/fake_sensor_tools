@@ -37,6 +37,7 @@ void FakeLivox::shutdownPlugin() {}
 
 void FakeLivox::saveSettings(qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
 {
+  (void)plugin_settings;
   instance_settings.setValue("name", widget->getName());
   instance_settings.setValue("broadcast_code", widget->getBroadcastCode());
   instance_settings.setValue("network_interface", widget->getNetworkInterface());
@@ -49,6 +50,7 @@ void FakeLivox::saveSettings(qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp:
 void FakeLivox::restoreSettings(
   const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings)
 {
+  (void)plugin_settings;
   widget->setName(instance_settings.value("name", "Horizon").toString());
   widget->setBroadcastCode(instance_settings.value("broadcast_code", "100000000000000").toString());
   widget->setNetworkInterface(instance_settings.value("network_interface", "").toString());

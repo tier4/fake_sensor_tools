@@ -92,18 +92,18 @@ public:
    * @brief Get device name.
    * @return Device name
    */
-  QString getDeviceName(void);
+  QString getDeviceName();
 
   /**
    * @brief Start serial port communication.
    * @return 0 on success, otherwise error
    */
-  int start(void);
+  int start();
 
   /**
    * @brief Stop serial port communication.
    */
-  void stop(void);
+  void stop();
 
 private slots:
   /**
@@ -134,62 +134,62 @@ private slots:
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool get_checksum_error(void);
+  bool get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool get_debug_output(void);
+  bool get_debug_output();
 
   /**
    * @brief Get aStatus thread-safely.
    * @return aStatus
    */
-  int get_a_status(void);
+  int get_a_status();
 
   /**
    * @brief Get jammingState thread-safely.
    * @return jammingState
    */
-  int get_jamming_state(void);
+  int get_jamming_state();
 
   /**
    * @brief Get spoofDetState thread-safely.
    * @return spoofDetState
    */
-  int get_spoof_det_state(void);
+  int get_spoof_det_state();
 
 Q_SIGNALS:
   /**
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool signal_get_checksum_error(void);
+  bool signal_get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool signal_get_debug_output(void);
+  bool signal_get_debug_output();
 
   /**
    * @brief Get aStatus thread-safely.
    * @return aStatus
    */
-  int signal_get_a_status(void);
+  int signal_get_a_status();
 
   /**
    * @brief Get jammingState thread-safely.
    * @return jammingState
    */
-  int signal_get_jamming_state(void);
+  int signal_get_jamming_state();
 
   /**
    * @brief Get spoofDetState thread-safely.
    * @return spoofDetState
    */
-  int signal_get_spoof_det_state(void);
+  int signal_get_spoof_det_state();
 
 private:
   /**
@@ -226,12 +226,12 @@ private:
    * @brief Thread loop.
    * @return nullptr
    */
-  void * thread(void);
+  void * thread();
 
   /**
    * @brief Handle periodic transmission.
    */
-  void handlePeriodicTransmit(void);
+  void handlePeriodicTransmit();
 
   /**
    * @brief Dump sent/received Data.
@@ -295,27 +295,27 @@ private:
   /**
    * @brief Send UBX-NAV-STATUS.
    */
-  void sendUbxNavSTATUS(void);
+  void sendUbxNavSTATUS();
 
   /**
    * @brief Send UBX-NAV-PVT.
    */
-  void sendUbxNavPVT(void);
+  void sendUbxNavPVT();
 
   /**
    * @brief Send UBX-NAV-RELPOSNED.
    */
-  void sendUbxNavRELPOSNED(void);
+  void sendUbxNavRELPOSNED();
 
   /**
    * @brief Send UBX-MON-HW.
    */
-  void sendUbxMonHW(void);
+  void sendUbxMonHW();
 
   /**
    * @brief Send UBX-MON-COMMS.
    */
-  void sendUbxMonCOMMS(void);
+  void sendUbxMonCOMMS();
 
   /**
    * @brief Send data.

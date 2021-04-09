@@ -39,11 +39,10 @@ public:
    * @param[in] dest_address destination address of packet
    * @param[in] dest_port destination port of packet
    * @param[in] packet_count number of packets
-   * @param[in] parent QObject
    */
   UDPInfo(
     const QString & source_address, const int source_port, const QString & dest_address, const int dest_port,
-    const int packet_count, QObject * parent = nullptr)
+    const int packet_count)
   : UDPInfo()
   {
     source_address_ = source_address;
@@ -75,7 +74,7 @@ public:
    * @brief Get source port of packet.
    * @return source address of packet
    */
-  const int getSourcePort() const { return source_port_; }
+  int getSourcePort() const { return source_port_; }
 
   /**
    * @brief Get destination address of packet.
@@ -87,13 +86,13 @@ public:
    * @brief Get destination port of packet.
    * @return source address of packet
    */
-  const int getDestPort() const { return dest_port_; }
+  int getDestPort() const { return dest_port_; }
 
   /**
    * @brief Get number of packets.
    * @return number of packets
    */
-  const int getPacketCount() const { return packet_count_; }
+  int getPacketCount() const { return packet_count_; }
 
   /**
    * @brief Increment number of packets.
@@ -104,7 +103,7 @@ public:
    * @brief Get transmit or not.
    * @return transmit or not
    */
-  const bool getTransmit() const { return transmit_; }
+  bool getTransmit() const { return transmit_; }
 
   /**
    * @brief Set transmit or not.

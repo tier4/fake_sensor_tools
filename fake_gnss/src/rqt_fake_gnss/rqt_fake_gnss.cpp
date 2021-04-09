@@ -38,12 +38,14 @@ void FakeGnss::shutdownPlugin() {}
 void FakeGnss::saveSettings(
   qt_gui_cpp::Settings & plugin_settings, qt_gui_cpp::Settings & instance_settings) const
 {
+  (void)plugin_settings;
   instance_settings.setValue("device_name", widget->getDeviceName());
 }
 
 void FakeGnss::restoreSettings(
   const qt_gui_cpp::Settings & plugin_settings, const qt_gui_cpp::Settings & instance_settings)
 {
+  (void)plugin_settings;
   widget->setDeviceName(instance_settings.value("device_name", "/dev/fake-gnss").toString());
 }
 

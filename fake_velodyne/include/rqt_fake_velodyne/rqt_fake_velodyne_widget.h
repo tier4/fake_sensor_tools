@@ -61,18 +61,18 @@ public:
    * @brief Get server address.
    * @return Server addess
    */
-  QString getAddress(void);
+  QString getAddress();
 
   /**
    * @brief Start HTTP server.
    * @return 0 on success, otherwise error
    */
-  int start(void);
+  int start();
 
   /**
    * @brief Stop HTTP server.
    */
-  void stop(void);
+  void stop();
 
 private slots:
   /**
@@ -217,14 +217,14 @@ private slots:
    * @brief Get server address thread-safely.
    * @return Server address
    */
-  QString get_server_address(void);
+  QString get_server_address();
 
 Q_SIGNALS:
   /**
    * @brief Get server address thread-safely.
    * @return Server address
    */
-  QString signal_get_server_address(void);
+  QString signal_get_server_address();
 
 private:
   /**
@@ -240,7 +240,7 @@ private:
    * @brief Thread loop.
    * @return nullptr
    */
-  void * thread(void);
+  void * thread();
 
   /**
    * @brief Handle 'GET' request.
@@ -251,22 +251,22 @@ private:
   /**
    * @brief Load data from info.json.
    */
-  void loadInfoJson(void);
+  void loadInfoJson();
 
   /**
    * @brief Load data from diag.json.
    */
-  void loadDiagJson(void);
+  void loadDiagJson();
 
   /**
    * @brief Load data from status.json.
    */
-  void loadStatusJson(void);
+  void loadStatusJson();
 
   /**
    * @brief Load data from settings.json.
    */
-  void loadSettingsJson(void);
+  void loadSettingsJson();
 
   /**
    * @brief Round off a number to specified place after decimal point.

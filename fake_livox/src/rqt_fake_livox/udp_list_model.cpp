@@ -36,9 +36,15 @@ Qt::ItemFlags UDPListModel::flags(const QModelIndex & index) const
   return result;
 }
 
-int UDPListModel::columnCount(const QModelIndex & parent) const { return 6; }
+int UDPListModel::columnCount(const QModelIndex & parent) const {
+  (void)parent;
+  return 6;
+}
 
-int UDPListModel::rowCount(const QModelIndex & parent) const { return list_.size(); }
+int UDPListModel::rowCount(const QModelIndex & parent) const {
+  (void)parent;
+  return list_.size();
+}
 
 QVariant UDPListModel::data(const QModelIndex & index, int role) const
 {
@@ -82,6 +88,8 @@ QVariant UDPListModel::data(const QModelIndex & index, int role) const
 
 bool UDPListModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+  (void)value;
+
   if (!index.isValid()) return false;
 
   if (role == Qt::CheckStateRole && index.column() == 0) {

@@ -59,18 +59,18 @@ public:
    * @brief Get device name.
    * @return Device name
    */
-  QString getDeviceName(void);
+  QString getDeviceName();
 
   /**
    * @brief Start serial port communication.
    * @return 0 on success, otherwise error
    */
-  int start(void);
+  int start();
 
   /**
    * @brief Stop serial port communication.
    */
-  void stop(void);
+  void stop();
 
 private slots:
   /**
@@ -83,26 +83,26 @@ private slots:
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool get_checksum_error(void);
+  bool get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool get_debug_output(void);
+  bool get_debug_output();
 
 Q_SIGNALS:
   /**
    * @brief Get Checksum error thread-safely.
    * @return Checksum error
    */
-  bool signal_get_checksum_error(void);
+  bool signal_get_checksum_error();
 
   /**
    * @brief Get Debug output thread-safely.
    * @return Debug output
    */
-  bool signal_get_debug_output(void);
+  bool signal_get_debug_output();
 
 private:
   /**
@@ -123,7 +123,7 @@ private:
    * @brief Thread loop.
    * @return nullptr
    */
-  void * thread(void);
+  void * thread();
 
   /**
    * @brief Dump sent/received Data.

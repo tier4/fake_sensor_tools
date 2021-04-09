@@ -36,7 +36,7 @@ static constexpr int MAX_SIZE = 1024;
 static constexpr int MAX_BIN_SIZE = 58;
 
 FakeImuWidget::FakeImuWidget(QWidget * parent)
-: QWidget(parent), ui(new Ui::FakeImuWidget), mutex_stop_(), stop_thread_(false), bin_req_(false), th_ptr_(nullptr)
+: QWidget(parent), ui(new Ui::FakeImuWidget), mutex_stop_(), th_ptr_(nullptr), stop_thread_(false), bin_req_(false)
 {
   ui->setupUi(this);
 
@@ -67,15 +67,15 @@ void FakeImuWidget::on_pushButton_serial_port_toggled(bool checked)
   }
 }
 
-bool FakeImuWidget::get_checksum_error(void) { return ui->pushButton_checksum_error->isChecked(); }
+bool FakeImuWidget::get_checksum_error() { return ui->pushButton_checksum_error->isChecked(); }
 
-bool FakeImuWidget::get_debug_output(void) { return ui->pushButton_debug_output->isChecked(); }
+bool FakeImuWidget::get_debug_output() { return ui->pushButton_debug_output->isChecked(); }
 
 void FakeImuWidget::setDeviceName(const QString & device_name) { ui->lineEdit_device_name->setText(device_name); }
 
-QString FakeImuWidget::getDeviceName(void) { return ui->lineEdit_device_name->text(); }
+QString FakeImuWidget::getDeviceName() { return ui->lineEdit_device_name->text(); }
 
-int FakeImuWidget::start(void)
+int FakeImuWidget::start()
 {
   int ret = 0;
 
@@ -110,7 +110,7 @@ void FakeImuWidget::stop()
   io_.stop();
 }
 
-void * FakeImuWidget::thread(void)
+void * FakeImuWidget::thread()
 {
   boost::thread thr_io(boost::bind(&as::io_service::run, &io_));
 
@@ -218,6 +218,9 @@ void FakeImuWidget::onRead(const boost::system::error_code & error, std::size_t 
 void FakeImuWidget::onWrite(
   const boost::system::error_code & error, std::size_t bytes_transfered, const std::vector<uint8_t> & data)
 {
+  (void)error;
+  (void)bytes_transfered;
+
   if (emit signal_get_debug_output()) {
     dumpBIN(&data[0]);
   }
