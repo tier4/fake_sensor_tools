@@ -10,13 +10,13 @@
 2. Launch sensor driver.
 
 ```
-roslaunch livox_ros_driver livox_lidar.launch
+ros2 launch src/vendor/livox-driver/livox_ros2_driver/launch/livox_lidar_launch.py
 ```
 
 - or if you wish to see point cloud in rviz, type the following command.
 
 ```
-roslaunch livox_ros_driver livox_lidar_rviz.launch
+ros2 launch src/vendor/livox-driver/livox_ros2_driver/launch/livox_lidar_rviz_launch.py
 ```
 
 - or you can use Livox Viewer.

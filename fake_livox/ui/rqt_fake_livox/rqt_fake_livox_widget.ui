@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1560</width>
+    <width>1315</width>
     <height>1275</height>
    </rect>
   </property>
@@ -130,8 +130,8 @@ QGroupBox { color: Ivory; font: 11pt &quot;Ubuntu&quot;; }</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1522</width>
-          <height>783</height>
+          <width>1295</width>
+          <height>905</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -337,15 +337,15 @@ background-repeat: none;
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1522</width>
-          <height>783</height>
+          <width>1295</width>
+          <height>905</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">QRadioButton {
   padding: 2px 2px;
   background-color: gainsboro; 
-  border-radius: 12px;
+  border-radius: 8px;
   font:bold;
   font-size: 12pt;
 }
@@ -455,10 +455,7 @@ QRadioButton::unchecked {
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">#radioButton_return_code_1
-{
-  spacing: 40px;
-}</string>
+               <string notr="true"/>
               </property>
               <property name="text">
                <string>Fail</string>
@@ -626,8 +623,8 @@ background-repeat: none;
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1522</width>
-          <height>783</height>
+          <width>1295</width>
+          <height>905</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -636,6 +633,8 @@ background-repeat: none;
   background-color: gainsboro; 
   border-radius: 12px;
   font:bold;
+  font-size:12pt;
+  spacing: -5px;
 }
 
 QRadioButton::indicator {
@@ -656,38 +655,7 @@ QRadioButton::checked {
 
 QRadioButton::unchecked {
     background-color: gainsboro; 
-}
-#radioButton_temp_status_0 {  spacing: -22px; }
-#radioButton_temp_status_1 {  spacing: 76px; }
-#radioButton_temp_status_2 {  spacing: -22px; }
-#radioButton_volt_status_0 {   }
-#radioButton_volt_status_1 {  spacing: 120px; }
-#radioButton_volt_status_2 {  spacing: 76px; }
-#radioButton_motor_status_0 {  spacing: 20px; }
-#radioButton_motor_status_1 {   }
-#radioButton_motor_status_2 {  spacing: -22px; }
-#radioButton_dirty_warn_0 {  spacing: 30px; }
-#radioButton_dirty_warn_1 {  spacing: 50px; }
-#radioButton_firmware_status_0 {  spacing: 56px; }
-#radioButton_firmware_status_1 {  spacing: -5px; }
-#radioButton_pps_status_0 {  spacing: 64px; }
-#radioButton_pps_status_1 {  spacing: 50px; }
-#radioButton_device_status_0 {  spacing: 100px; }
-#radioButton_device_status_1 {  spacing: -20px; }
-#radioButton_fan_status_0 {  spacing: 40px; }
-#radioButton_fan_status_1 {  spacing: 40px; }
-#radioButton_self_heating_0 {  spacing: -24px; }
-#radioButton_self_heating_1 {  spacing: -24px; }
-#radioButton_ptp_status_0 {  spacing: 60px; }
-#radioButton_ptp_status_1 {  spacing: 50px; }
-#radioButton_time_sync_status_0 {  spacing: -24px; }
-#radioButton_time_sync_status_1 {  spacing: 40px; }
-#radioButton_time_sync_status_2 {  spacing: -12px; }
-#radioButton_time_sync_status_3 {  spacing: -12px; }
-#radioButton_time_sync_status_4 {  spacing: -22px; }
-#radioButton_system_status_0 {  spacing: 100px; }
-#radioButton_system_status_1 {  spacing: 100px; }
-#radioButton_system_status_2 {  spacing: 120px; }</string>
+}</string>
         </property>
         <attribute name="label">
          <string>LiDAR Status Code</string>
@@ -760,7 +728,7 @@ QRadioButton::unchecked {
               <rect>
                <x>740</x>
                <y>0</y>
-               <width>421</width>
+               <width>361</width>
                <height>46</height>
               </rect>
              </property>
@@ -825,7 +793,7 @@ QRadioButton::unchecked {
               <rect>
                <x>740</x>
                <y>0</y>
-               <width>421</width>
+               <width>361</width>
                <height>46</height>
               </rect>
              </property>
@@ -890,7 +858,7 @@ QRadioButton::unchecked {
               <rect>
                <x>740</x>
                <y>0</y>
-               <width>461</width>
+               <width>361</width>
                <height>46</height>
               </rect>
              </property>
@@ -997,7 +965,7 @@ QRadioButton::unchecked {
               <rect>
                <x>370</x>
                <y>0</y>
-               <width>591</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1107,7 +1075,7 @@ QRadioButton::unchecked {
               <rect>
                <x>370</x>
                <y>0</y>
-               <width>591</width>
+               <width>411</width>
                <height>46</height>
               </rect>
              </property>
@@ -1201,7 +1169,7 @@ QRadioButton::unchecked {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>421</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1215,9 +1183,9 @@ QRadioButton::unchecked {
             <widget class="QRadioButton" name="radioButton_self_heating_1">
              <property name="geometry">
               <rect>
-               <x>420</x>
+               <x>370</x>
                <y>0</y>
-               <width>431</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1311,7 +1279,7 @@ QRadioButton::unchecked {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>541</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1325,9 +1293,9 @@ QRadioButton::unchecked {
             <widget class="QRadioButton" name="radioButton_time_sync_status_1">
              <property name="geometry">
               <rect>
-               <x>540</x>
+               <x>370</x>
                <y>0</y>
-               <width>521</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1359,7 +1327,7 @@ QRadioButton::unchecked {
               <rect>
                <x>740</x>
                <y>50</y>
-               <width>501</width>
+               <width>371</width>
                <height>46</height>
               </rect>
              </property>
@@ -1461,8 +1429,8 @@ QRadioButton::unchecked {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1522</width>
-          <height>783</height>
+          <width>1295</width>
+          <height>905</height>
          </rect>
         </property>
         <attribute name="label">

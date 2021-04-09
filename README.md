@@ -46,7 +46,7 @@ Then, run RQt on another terminal window.
 
 ```
 source install/setup.bash
-rqt
+rqt --force-discover
 ```
 
 # Tools
