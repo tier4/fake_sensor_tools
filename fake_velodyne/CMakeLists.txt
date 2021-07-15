@@ -43,6 +43,7 @@ set(rqt_fake_velodyne_INCLUDE_DIRECTORIES
   include
   include/rqt_fake_velodyne
   ${rqt_gui_cpp_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 file(GLOB QWT_INCLUDE_DIR "/usr/include/qwt")

@@ -46,6 +46,7 @@ set(rqt_fake_gnss_INCLUDE_DIRECTORIES
   include
   include/rqt_fake_gnss
   ${rqt_gui_cpp_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 file(GLOB QWT_INCLUDE_DIR "/usr/include/qwt")

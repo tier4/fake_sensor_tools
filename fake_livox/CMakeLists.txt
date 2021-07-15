@@ -52,6 +52,7 @@ set(rqt_fake_livox_INCLUDE_DIRECTORIES
   include/rqt_fake_livox
   include/third_party/FastCRC
   ${rqt_gui_cpp_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 file(GLOB QWT_INCLUDE_DIR "/usr/include/qwt")
