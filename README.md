@@ -19,8 +19,13 @@ git checkout ros2
 ```
 sudo apt install socat
 ```
+3. Install dependencies
 
-3. Install dependencies using `rosdep`.
+```
+sudo apt install qtbase5-dev qttools5-dev-tools qt5-default libqwt-qt5-dev
+```
+
+4. Install dependencies using `rosdep`.
 
 ```
 cd fake_sensor_tools
@@ -28,13 +33,13 @@ rosdep update
 rosdep install -y --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 ```
 
-4. Build this workspace.
+5. Build this workspace.
 
 ```
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
-5. Run RQt.
+6. Run RQt.
 
 If roscore is not already running, you need to run roscore on one terminal window.
 
