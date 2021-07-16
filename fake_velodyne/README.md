@@ -14,7 +14,7 @@
 2. Launch a client.
 
 ```
-rosrun sensor_monitor velodyne_monitor _ip_address:='localhost:8000'
+ros2 launch velodyne_monitor velodyne_monitor.launch.xml ip_address:='localhost:8000'
 ```
 
 Then transmission will be started.
