@@ -64,7 +64,7 @@ qt5_add_resources(rqt_fake_livox_RS_H ${rqt_fake_livox_RS})
 
 include_directories(${rqt_fake_livox_INCLUDE_DIRECTORIES} ${QWT_INCLUDE_DIR})
 add_library(${PROJECT_NAME} SHARED ${rqt_fake_livox_SRCS} ${rqt_fake_livox_MOCS} ${rqt_fake_livox_UIS_H} ${rqt_fake_livox_RS_H})
-target_link_libraries(${PROJECT_NAME} ${QWT_LIBRARIES} ${rqt_gui_cpp_LIBRARIES} ${Boost_LIBRARIES} Qt5::Widgets pcap)
+target_link_libraries(${PROJECT_NAME} ${QWT_LIBRARIES} ${rqt_gui_cpp_LIBRARIES} ${Boost_LIBRARIES} Qt5::Widgets pcap fmt)
 
 #############
 ## Install ##
