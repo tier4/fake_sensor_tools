@@ -36,7 +36,12 @@ rosdep install -y --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 5. Build this workspace.
 
 ```
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --symlink-install
+```
+
+For galactic
+```
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 --symlink-install
 ```
 
 6. Run RQt.
