@@ -15,19 +15,34 @@
  */
 
 /**
- * @file lidar_status.h
- * @brief List of LiDAR status
+ * @file lidar_status_code.h
+ * @brief List of LiDAR Status Code
  */
 
 #pragma once
 
 #include <stdint.h>
 
-enum class LidarStatus : int8_t {
-  ChecksumError,
-  DebugOutput,
-  ReturnCode,
-  LidarState,
-  RainFogSuppressionSwitch,
-  InitializationProgress,
+enum class LidarStatusCode : int8_t {
+  TempStatus,
+  VoltStatus,
+  MotorStatus,
+  DirtyWarn,
+  FirmwareStatus,
+  PpsStatus,
+  DeviceStatus,
+  FanStatus,
+  SelfHeating,
+  PtpStatus,
+  TimeSyncStatus,
+  SystemStatus,
+};
+
+struct LidarStatusCodeValue
+{
+  LidarStatusCodeValue() {}
+  LidarStatusCodeValue(bool t, int v) : trigger_system_status(t), value(v) {}
+
+  bool trigger_system_status = false;
+  int value = 0;
 };

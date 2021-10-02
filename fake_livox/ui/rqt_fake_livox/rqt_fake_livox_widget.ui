@@ -1378,6 +1378,9 @@ QRadioButton::unchecked {
              </size>
             </property>
             <widget class="QRadioButton" name="radioButton_system_status_0">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>0</x>
@@ -1385,6 +1388,11 @@ QRadioButton::unchecked {
                <width>371</width>
                <height>46</height>
               </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton {
+  background-color: slategrey;
+}</string>
              </property>
              <property name="text">
               <string>Normal</string>
@@ -1394,6 +1402,9 @@ QRadioButton::unchecked {
              </property>
             </widget>
             <widget class="QRadioButton" name="radioButton_system_status_1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>370</x>
@@ -1402,11 +1413,19 @@ QRadioButton::unchecked {
                <height>46</height>
               </rect>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton {
+  background-color: slategrey;
+}</string>
+             </property>
              <property name="text">
               <string>Warning</string>
              </property>
             </widget>
             <widget class="QRadioButton" name="radioButton_system_status_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>740</x>
@@ -1414,6 +1433,11 @@ QRadioButton::unchecked {
                <width>371</width>
                <height>46</height>
               </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton {
+  background-color: slategrey;
+}</string>
              </property>
              <property name="text">
               <string>Error</string>

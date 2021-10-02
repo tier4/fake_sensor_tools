@@ -227,6 +227,18 @@ typedef struct
   uint8_t firmware_version[4];  //!< @brief Firmware version.
 } DeviceInformationResponse;
 
+/** Point data type. */
+typedef enum {
+  kCartesian,               /**< Cartesian coordinate point cloud. */
+  kSpherical,               /**< Spherical coordinate point cloud. */
+  kExtendCartesian,         /**< Extend cartesian coordinate point cloud. */
+  kExtendSpherical,         /**< Extend spherical coordinate point cloud. */
+  kDualExtendCartesian,     /**< Dual extend cartesian coordinate  point cloud. */
+  kDualExtendSpherical,     /**< Dual extend spherical coordinate point cloud. */
+  kImu,                     /**< IMU data. */
+  kMaxPointDataType         /**< Max Point Data Type. */
+} PointDataType;
+
 /**
  * @brief LiDAR error code.
  */
@@ -260,6 +272,20 @@ typedef union {
   uint32_t error_code;              //!< @brief Error code.
   LidarErrorCode lidar_error_code;  //!< @brief Lidar error code.
 } ErrorMessage;
+
+/** Point cloud packet. */
+typedef struct {
+  uint8_t version;              /**< Packet protocol version. */
+  uint8_t slot;                 /**< Slot number used for connecting LiDAR. */
+  uint8_t id;                   /**< LiDAR id. */
+  uint8_t rsvd;                 /**< Reserved. */
+  uint32_t err_code;      /**< Device error status indicator information. */
+  uint8_t timestamp_type;       /**< Timestamp type. */
+  /** Point cloud coordinate format, refer to \ref PointDataType . */
+  uint8_t data_type;
+  uint8_t timestamp[8];         /**< Nanosecond or UTC format timestamp. */
+  uint8_t data[1];              /**< Point cloud data. */
+} LivoxEthPacket;
 
 /**
  * @brief Information of LiDAR work state.

@@ -35,7 +35,7 @@ std::map<CmdSetId, SDKProtocol::HandleFunction> SDKProtocol::handle_map_ = {
 };
 
 SDKProtocol::SDKProtocol()
-: th_ptr_(nullptr), stop_thread_(false), crc16_(0x4c49), crc32_(0x564f580a), broadcast_code_("")
+: th_ptr_(nullptr), stop_thread_(false), crc16_(0x4c49), crc32_(0x564f580a), broadcast_code_(""), status_code_(0)
 {
   initLidarStatus();
 }
@@ -45,14 +45,13 @@ SDKProtocol::~SDKProtocol() {}
 void SDKProtocol::setLidarStatus(const LidarStatus & name, int value)
 {
   std::lock_guard<std::mutex> lock(mutex_config_);
-  status_[name].value = value;
-  setSystemStatus();
+  status_[name] = value;
 }
 
-int SDKProtocol::getSystemStatus()
+void SDKProtocol::setLidarStatusCode(uint32_t status_code)
 {
   std::lock_guard<std::mutex> lock(mutex_config_);
-  return status_[LidarStatus::SystemStatus].value;
+  status_code_ = status_code;
 }
 
 int SDKProtocol::start(const asip::address_v4 & livox_ip, const std::string & broadcast_code)
@@ -60,6 +59,7 @@ int SDKProtocol::start(const asip::address_v4 & livox_ip, const std::string & br
   int ret = 0;
 
   broadcast_code_ = broadcast_code;
+  livox_ip_ = livox_ip;
 
   // Preparation for a subsequent run() invocation
   io_.reset();
@@ -130,40 +130,18 @@ void * SDKProtocol::thread()
 
 void SDKProtocol::initLidarStatus()
 {
-  status_[LidarStatus::ChecksumError] = LidarValue(false, 0);
-  status_[LidarStatus::DebugOutput] = LidarValue(false, 0);
-  status_[LidarStatus::ReturnCode] = LidarValue(false, 0);
-  status_[LidarStatus::LidarState] = LidarValue(false, 1);
-  status_[LidarStatus::RainFogSuppressionSwitch] = LidarValue(false, 0);
-  status_[LidarStatus::InitializationProgress] = LidarValue(false, 0);
-  status_[LidarStatus::TempStatus] = LidarValue(true, 0);
-  status_[LidarStatus::VoltStatus] = LidarValue(true, 0);
-  status_[LidarStatus::MotorStatus] = LidarValue(true, 0);
-  status_[LidarStatus::DirtyWarn] = LidarValue(true, 0);
-  status_[LidarStatus::FirmwareStatus] = LidarValue(true, 0);
-  status_[LidarStatus::PpsStatus] = LidarValue(false, 0);
-  status_[LidarStatus::DeviceStatus] = LidarValue(true, 0);
-  status_[LidarStatus::FanStatus] = LidarValue(true, 0);
-  status_[LidarStatus::SelfHeating] = LidarValue(false, 0);
-  status_[LidarStatus::PtpStatus] = LidarValue(false, 0);
-  status_[LidarStatus::TimeSyncStatus] = LidarValue(false, 0);
-  status_[LidarStatus::SystemStatus] = LidarValue(false, 0);
+  status_[LidarStatus::ChecksumError] = 0;
+  status_[LidarStatus::DebugOutput] = 0;
+  status_[LidarStatus::ReturnCode] = 0;
+  status_[LidarStatus::LidarState] = 1;
+  status_[LidarStatus::RainFogSuppressionSwitch] = 0;
+  status_[LidarStatus::InitializationProgress] = 0;
 }
 
 int SDKProtocol::getLidarStatus(const LidarStatus & name)
 {
   std::lock_guard<std::mutex> lock(mutex_config_);
-  return status_[name].value;
-}
-
-void SDKProtocol::setSystemStatus()
-{
-  int level = 0;
-  for (auto s : status_) {
-    // If situation will trigger system warning or error
-    if (s.second.trigger_system_status) level = std::max(s.second.value, level);
-  }
-  status_[LidarStatus::SystemStatus].value = level;
+  return status_[name];
 }
 
 void SDKProtocol::dump(Direction dir, const uint8_t * data, std::size_t size)
@@ -296,18 +274,7 @@ void SDKProtocol::handleGeneralHeartbeat(SdkPacket * packet)
   if (payload.state == kLidarStateInit) {
     payload.error_union.progress = getLidarStatus(LidarStatus::InitializationProgress);
   } else {
-    payload.error_union.status_code.lidar_error_code.temp_status = getLidarStatus(LidarStatus::TempStatus);
-    payload.error_union.status_code.lidar_error_code.volt_status = getLidarStatus(LidarStatus::VoltStatus);
-    payload.error_union.status_code.lidar_error_code.motor_status = getLidarStatus(LidarStatus::MotorStatus);
-    payload.error_union.status_code.lidar_error_code.dirty_warn = getLidarStatus(LidarStatus::DirtyWarn);
-    payload.error_union.status_code.lidar_error_code.firmware_err = getLidarStatus(LidarStatus::FirmwareStatus);
-    payload.error_union.status_code.lidar_error_code.pps_status = getLidarStatus(LidarStatus::PpsStatus);
-    payload.error_union.status_code.lidar_error_code.device_status = getLidarStatus(LidarStatus::DeviceStatus);
-    payload.error_union.status_code.lidar_error_code.fan_status = getLidarStatus(LidarStatus::FanStatus);
-    payload.error_union.status_code.lidar_error_code.self_heating = getLidarStatus(LidarStatus::SelfHeating);
-    payload.error_union.status_code.lidar_error_code.ptp_status = getLidarStatus(LidarStatus::PtpStatus);
-    payload.error_union.status_code.lidar_error_code.time_sync_status = getLidarStatus(LidarStatus::TimeSyncStatus);
-    payload.error_union.status_code.lidar_error_code.system_status = getLidarStatus(LidarStatus::SystemStatus);
+    payload.error_union.status_code.error_code = status_code_;
   }
 
   asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
@@ -332,7 +299,7 @@ void SDKProtocol::handleGeneralControlSample(SdkPacket * packet)
   asip::udp::endpoint ep = asip::udp::endpoint(user_ip_, cmd_port_);
   send(ep, &out, ptr, sizeof(GenericResponse));
 
-  if (callback_) callback_(req, user_ip_, data_port_);
+  if (callback_) callback_(req, livox_ip_, user_ip_, data_port_);
 }
 
 void SDKProtocol::handleGeneralCoordinateSystem(SdkPacket * packet)

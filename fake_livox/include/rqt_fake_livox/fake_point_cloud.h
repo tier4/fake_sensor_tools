@@ -49,19 +49,26 @@ public:
    * @brief Start point cloud sampling.
    * @param[in] pcap_path path of pcap file
    * @param[in] pcap_filter filter program for pcap
+   * @param[in] livox_ip IP address of Livox
    * @param[in] user_ip Host IPAddress
    * @param[in] data_port Host Point Cloud Data UDP Destination Port
    * @param[in] loop loop playback
    * @return 0 on success, otherwise error
    */
   int start(
-    const std::string & pcap_path, const std::string & pcap_filter, const asip::address_v4 & user_ip,
-    uint16_t data_port, bool loop);
+    const std::string & pcap_path, const std::string & pcap_filter, const asip::address_v4 & livox_ip,
+    const asip::address_v4 & user_ip, uint16_t data_port, bool loop);
 
   /**
    * @brief Stop point cloud sampling.
    */
   void stop();
+
+  /**
+   * @brief Set LiDAR Status Code.
+   * @param[in] status_code value of LiDAR Status Code
+   */
+  void setLidarStatusCode(uint32_t status_code);
 
 private:
   /**
@@ -117,4 +124,6 @@ private:
   std::string pcap_path_;                        //!< @brief path of pcap file
   std::string pcap_filter_;                      //!< @brief filter program for pcap
   bool loop_;                                    //!< @brief loop playback
+  uint32_t status_code_;                         //!< @brief LiDAR Status Code
+  std::mutex mutex_config_;                      //!< @brief mutex to protect access to configuration
 };

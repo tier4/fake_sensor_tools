@@ -30,6 +30,7 @@
 #include <QWidget>
 
 #include <fake_point_cloud.h>
+#include <lidar_status_code.h>
 #include <sdk_protocol.h>
 #include <udp_list_model.h>
 
@@ -291,13 +292,34 @@ private slots:
 
 private:
   /**
+   * @brief Initialize LiDAR Status Code.
+   */
+  void initLidarStatusCode();
+
+  /**
+   * @brief Get LiDAR Status Code.
+   * @param[in] name name of LiDAR status
+   * @param[in] value value of LiDAR status
+   */
+  uint32_t getLidarStatusCode(const LidarStatusCode & name, int value);
+
+  /**
+   * @brief Set LiDAR Status Code to other class.
+   * @param[in] name name of LiDAR Status Code
+   * @param[in] value value of LiDAR Status Code
+   */
+  void notifyLidarStatusCode(const LidarStatusCode & name, uint32_t value);
+
+  /**
    * @brief Callback for Start/Stop Sampling.
    * @param[in] request Start/Stop Sampling
+   * @param[in] livox_ip IP address of Livox
    * @param[in] user_ip Host IPAddress
    * @param[in] data_port Host Point Cloud Data UDP Destination Port
    */
   void onControlSampleRequest(
-    const ControlSampleRequest * request, const asip::address_v4 & user_ip, uint16_t data_port);
+    const ControlSampleRequest * request, const asip::address_v4 & livox_ip, const asip::address_v4 & user_ip,
+    uint16_t data_port);
 
   /**
    * @brief Add radio button to group.
@@ -308,11 +330,6 @@ private:
    * @brief Enumerate network interface.
    */
   void getNetworkInterfaces();
-
-  /**
-   * @brief Update system_status.
-   */
-  void updateSystemStatus(int level);
 
   /**
    * @brief Read pcap.
@@ -351,14 +368,15 @@ private:
    */
   std::string createFilter();
 
-  Ui::FakeLivoxWidget * ui;                     //!< @brief UI
-  QButtonGroup * buttonGroup_system_status_;    //!< @brief QButtonGroup
-  std::map<std::string, int> status_codes_;     //!< @brief LiDAR status_codes
-  pcap_t * pcap_;                               //!< @brief Descriptor of an open capture instance
-  int packet_count_;                            //!< @brief packet count in pcap
-  UDPListModel * model_;                        //!< @brief list model for UDP information
-  SDKProtocol sdk_protocol_;                    //!< @brief Handling SDK protocol class
-  FakePointCloud point_cloud_;                  //!< @brief Fake point cloud sampling class
-  bool loop_;                                   //!< @brief loop playback
-  std::vector<NetworkInterface> network_list_;  //!< @brief list of network interface
+  Ui::FakeLivoxWidget * ui;                                      //!< @brief UI
+  QButtonGroup * buttonGroup_system_status_;                     //!< @brief QButtonGroup
+  std::map<std::string, int> status_codes_;                      //!< @brief LiDAR status_codes
+  pcap_t * pcap_;                                                //!< @brief Descriptor of an open capture instance
+  int packet_count_;                                             //!< @brief packet count in pcap
+  UDPListModel * model_;                                         //!< @brief list model for UDP information
+  SDKProtocol sdk_protocol_;                                     //!< @brief Handling SDK protocol class
+  FakePointCloud point_cloud_;                                   //!< @brief Fake point cloud sampling class
+  bool loop_;                                                    //!< @brief loop playback
+  std::vector<NetworkInterface> network_list_;                   //!< @brief list of network interface
+  std::map<LidarStatusCode, LidarStatusCodeValue> status_code_;  //!< @brief LiDAR Status Code
 };

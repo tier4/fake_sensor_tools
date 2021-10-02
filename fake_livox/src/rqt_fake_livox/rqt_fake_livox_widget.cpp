@@ -52,7 +52,12 @@ FakeLivoxWidget::FakeLivoxWidget(QWidget * parent) : QWidget(parent), ui(new Ui:
   ui->tableView_pcap_packets->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
   ui->tableView_pcap_packets->horizontalHeader()->setStretchLastSection(false);
 
-  sdk_protocol_.setCallback(boost::bind(&FakeLivoxWidget::onControlSampleRequest, this, _1, _2, _3));
+  initLidarStatusCode();
+
+  ui->radioButton_pps_status_1->animateClick();
+  ui->radioButton_time_sync_status_3->animateClick();
+
+  sdk_protocol_.setCallback(boost::bind(&FakeLivoxWidget::onControlSampleRequest, this, _1, _2, _3, _4));
 
   // Enumerate network interface
   getNetworkInterfaces();
@@ -159,71 +164,46 @@ void FakeLivoxWidget::on_slider_initialization_progress_valueChanged(double valu
   sdk_protocol_.setLidarStatus(LidarStatus::InitializationProgress, value);
 }
 
-void FakeLivoxWidget::onButtonGroupTempStatusClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::TempStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
-}
+void FakeLivoxWidget::onButtonGroupTempStatusClicked(int id) { notifyLidarStatusCode(LidarStatusCode::TempStatus, id); }
 
-void FakeLivoxWidget::onButtonGroupVoltStatusClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::VoltStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
-}
+void FakeLivoxWidget::onButtonGroupVoltStatusClicked(int id) { notifyLidarStatusCode(LidarStatusCode::VoltStatus, id); }
 
 void FakeLivoxWidget::onButtonGroupMotorStatusClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::MotorStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
+  notifyLidarStatusCode(LidarStatusCode::MotorStatus, id);
 }
 
-void FakeLivoxWidget::onButtonGroupDirtyWarnClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::DirtyWarn, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
-}
+void FakeLivoxWidget::onButtonGroupDirtyWarnClicked(int id) { notifyLidarStatusCode(LidarStatusCode::DirtyWarn, id); }
 
 void FakeLivoxWidget::onButtonGroupFirmwareStatusClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::FirmwareStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
+  notifyLidarStatusCode(LidarStatusCode::FirmwareStatus, id);
 }
 
-void FakeLivoxWidget::onButtonGroupPpsStatusClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::PpsStatus, id);
-}
+void FakeLivoxWidget::onButtonGroupPpsStatusClicked(int id) { notifyLidarStatusCode(LidarStatusCode::PpsStatus, id); }
 
 void FakeLivoxWidget::onButtonGroupDeviceStatusClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::DeviceStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
+  notifyLidarStatusCode(LidarStatusCode::DeviceStatus, id);
 }
 
-void FakeLivoxWidget::onButtonGroupFanStatusClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::FanStatus, id);
-  updateSystemStatus(sdk_protocol_.getSystemStatus());
-}
+void FakeLivoxWidget::onButtonGroupFanStatusClicked(int id) { notifyLidarStatusCode(LidarStatusCode::FanStatus, id); }
 
 void FakeLivoxWidget::onButtonGroupSelfHeatingClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::SelfHeating, id);
+  notifyLidarStatusCode(LidarStatusCode::SelfHeating, id);
 }
 
-void FakeLivoxWidget::onButtonGroupPtpStatusClicked(int id)
-{
-  sdk_protocol_.setLidarStatus(LidarStatus::PtpStatus, id);
-}
+void FakeLivoxWidget::onButtonGroupPtpStatusClicked(int id) { notifyLidarStatusCode(LidarStatusCode::PtpStatus, id); }
 
 void FakeLivoxWidget::onButtonGroupTimeSyncStatusClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::TimeSyncStatus, id);
+  notifyLidarStatusCode(LidarStatusCode::TimeSyncStatus, id);
 }
 
 void FakeLivoxWidget::onButtonGroupSystemStatusClicked(int id)
 {
-  sdk_protocol_.setLidarStatus(LidarStatus::SystemStatus, id);
+  notifyLidarStatusCode(LidarStatusCode::SystemStatus, id);
 }
 
 void FakeLivoxWidget::on_pushButton_pcap_path_clicked()
@@ -271,8 +251,62 @@ void FakeLivoxWidget::on_checkBox_select_from_list_toggled(bool checked)
   ui->tableView_pcap_packets->update();
 }
 
+void FakeLivoxWidget::initLidarStatusCode()
+{
+  status_code_[LidarStatusCode::TempStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::VoltStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::MotorStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::DirtyWarn] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::FirmwareStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::PpsStatus] = LidarStatusCodeValue(false, 0);
+  status_code_[LidarStatusCode::DeviceStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::FanStatus] = LidarStatusCodeValue(true, 0);
+  status_code_[LidarStatusCode::SelfHeating] = LidarStatusCodeValue(false, 0);
+  status_code_[LidarStatusCode::PtpStatus] = LidarStatusCodeValue(false, 0);
+  status_code_[LidarStatusCode::TimeSyncStatus] = LidarStatusCodeValue(false, 0);
+  status_code_[LidarStatusCode::SystemStatus] = LidarStatusCodeValue(false, 0);
+}
+
+uint32_t FakeLivoxWidget::getLidarStatusCode(const LidarStatusCode & name, int value)
+{
+  status_code_[name].value = value;
+
+  int level = 0;
+  for (auto s : status_code_) {
+    // If situation will trigger system warning or error
+    if (s.second.trigger_system_status) level = std::max(s.second.value, level);
+  }
+  status_code_[LidarStatusCode::SystemStatus].value = level;
+  buttonGroup_system_status_->button(level)->setChecked(true);
+
+  ErrorMessage status_code = {};
+  status_code.lidar_error_code.temp_status = status_code_[LidarStatusCode::TempStatus].value;
+  status_code.lidar_error_code.volt_status = status_code_[LidarStatusCode::VoltStatus].value;
+  status_code.lidar_error_code.motor_status = status_code_[LidarStatusCode::MotorStatus].value;
+  status_code.lidar_error_code.dirty_warn = status_code_[LidarStatusCode::DirtyWarn].value;
+  status_code.lidar_error_code.firmware_err = status_code_[LidarStatusCode::FirmwareStatus].value;
+  status_code.lidar_error_code.pps_status = status_code_[LidarStatusCode::PpsStatus].value;
+  status_code.lidar_error_code.device_status = status_code_[LidarStatusCode::DeviceStatus].value;
+  status_code.lidar_error_code.fan_status = status_code_[LidarStatusCode::FanStatus].value;
+  status_code.lidar_error_code.self_heating = status_code_[LidarStatusCode::SelfHeating].value;
+  status_code.lidar_error_code.ptp_status = status_code_[LidarStatusCode::PtpStatus].value;
+  status_code.lidar_error_code.time_sync_status = status_code_[LidarStatusCode::TimeSyncStatus].value;
+  status_code.lidar_error_code.system_status = status_code_[LidarStatusCode::SystemStatus].value;
+
+  return status_code.error_code;
+}
+
+void FakeLivoxWidget::notifyLidarStatusCode(const LidarStatusCode & name, uint32_t value)
+{
+  uint32_t status_code = getLidarStatusCode(name, value);
+
+  sdk_protocol_.setLidarStatusCode(status_code);
+  point_cloud_.setLidarStatusCode(status_code);
+}
+
 void FakeLivoxWidget::onControlSampleRequest(
-  const ControlSampleRequest * request, const asip::address_v4 & user_ip, uint16_t data_port)
+  const ControlSampleRequest * request, const asip::address_v4 & livox_ip, const asip::address_v4 & user_ip,
+  uint16_t data_port)
 {
   if (!request->sample_ctrl) {
     // Stop point cloud sampling
@@ -285,7 +319,7 @@ void FakeLivoxWidget::onControlSampleRequest(
     const std::string str(fileName.toLocal8Bit());
 
     // Start point cloud sampling
-    point_cloud_.start(str, createFilter(), user_ip, data_port, loop_);
+    point_cloud_.start(str, createFilter(), livox_ip, user_ip, data_port, loop_);
   }
 }
 
@@ -422,8 +456,6 @@ void FakeLivoxWidget::getNetworkInterfaces()
   ::close(sock);
   free(ifc.ifc_ifcu.ifcu_buf);
 }
-
-void FakeLivoxWidget::updateSystemStatus(int level) { buttonGroup_system_status_->button(level)->setChecked(true); }
 
 void FakeLivoxWidget::readPcap(const QString & fileName)
 {

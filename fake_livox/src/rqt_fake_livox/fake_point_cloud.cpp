@@ -23,15 +23,16 @@
 #include <boost/thread.hpp>
 #include <iostream>
 
+#include <livox.h>
 #include <rqt_fake_livox/fake_point_cloud.h>
 
-FakePointCloud::FakePointCloud() : th_ptr_(nullptr), stop_thread_(false), loop_(false) {}
+FakePointCloud::FakePointCloud() : th_ptr_(nullptr), stop_thread_(false), loop_(false), status_code_(0) {}
 
 FakePointCloud::~FakePointCloud() {}
 
 int FakePointCloud::start(
-  const std::string & pcap_path, const std::string & pcap_filter, const asip::address_v4 & user_ip, uint16_t data_port,
-  bool loop)
+  const std::string & pcap_path, const std::string & pcap_filter, const asip::address_v4 & livox_ip,
+  const asip::address_v4 & user_ip, uint16_t data_port, bool loop)
 {
   int ret = 0;
 
@@ -50,6 +51,8 @@ int FakePointCloud::start(
     socket_->open(asip::udp::v4());
     // Allow the socket to be bound to an address that is already in use
     socket_->set_option(asip::udp::socket::reuse_address(true));
+    asip::udp::endpoint ep = asip::udp::endpoint(livox_ip, data_port + 1);
+    socket_->bind(ep);
   } catch (const boost::system::system_error & e) {
     ret = ENOENT;
     std::cerr << e.what() << std::endl;
@@ -76,6 +79,12 @@ void FakePointCloud::stop()
     io_.stop();
     th_ptr_ = nullptr;
   }
+}
+
+void FakePointCloud::setLidarStatusCode(uint32_t status_code)
+{
+  std::lock_guard<std::mutex> lock(mutex_config_);
+  status_code_ = status_code;
 }
 
 void * FakePointCloud::thread()
@@ -164,7 +173,7 @@ void FakePointCloud::performPcap()
 
 void FakePointCloud::send(const u_char * packet)
 {
-  const u_char * p = packet;
+  u_char * p = const_cast<u_char *>(packet);
 
   p += sizeof(struct ether_header);
   const struct iphdr * ip = reinterpret_cast<const struct iphdr *>(p);
@@ -173,6 +182,12 @@ void FakePointCloud::send(const u_char * packet)
     p += ((struct iphdr *)p)->ihl * 4;
     const struct udphdr * udp = (struct udphdr *)(p);
     p += sizeof(struct udphdr);
+
+    LivoxEthPacket * eth_packet = reinterpret_cast<LivoxEthPacket *>(p);
+    if (eth_packet->data_type != PointDataType::kImu) {
+      std::lock_guard<std::mutex> lock(mutex_config_);
+      eth_packet->err_code = status_code_;
+    }
 
     // 2-byte length of payload including UDP header (8 bytes)
     uint16_t len = ntohs(udp->len) - sizeof(struct udphdr);

@@ -82,13 +82,14 @@ public:
   void setLidarStatus(const LidarStatus & name, int value);
 
   /**
-   * @brief Set system_status in LiDAR Status Code.
-   * @return system_status
+   * @brief Set LiDAR Status Code.
+   * @param[in] status_code value of LiDAR Status Code
    */
-  int getSystemStatus();
+  void setLidarStatusCode(uint32_t status_code);
 
   typedef boost::function<void(
-    const ControlSampleRequest * request, const asip::address_v4 & user_ip, uint16_t data_port)>
+    const ControlSampleRequest * request, const asip::address_v4 & livox_ip, const asip::address_v4 & user_ip,
+    uint16_t data_port)>
     ControlSampleRequestCallback;
 
   /**
@@ -144,11 +145,6 @@ private:
    * @return value of LiDAR status
    */
   int getLidarStatus(const LidarStatus & name);
-
-  /**
-   * @brief Set system_status in LiDAR Status Code.
-   */
-  void setSystemStatus();
 
   /**
    * @brief Dump sent/received Data.
@@ -253,13 +249,15 @@ private:
   static std::map<CmdSetId, HandleFunction> handle_map_;  //!< @brief message handler map
   FastCRC16 crc16_;                                       //!< @brief 16-BIT CRC
   FastCRC32 crc32_;                                       //!< @brief 32-BIT CRC
+  asip::address_v4 livox_ip_;                             //!< @brief IP address of Livox
   asip::address_v4 user_ip_;                              //!< @brief Host IPAddress
   uint16_t data_port_;                                    //!< @brief Host Point Cloud Data UDP Destination Port
   uint16_t cmd_port_;                                     //!< @brief Host Control Command UDP Destination Port
   FakePointCloud point_cloud_;                            //!< @brief Fake point cloud sampling class
 
-  std::mutex mutex_config_;                   //!< @brief mutex to protect access to configuration
-  std::string broadcast_code_;                //!< @brief Broadcast code
-  std::map<LidarStatus, LidarValue> status_;  //!< @brief LiDAR status
-  ControlSampleRequestCallback callback_;     //!< @brief callback
+  std::mutex mutex_config_;                //!< @brief mutex to protect access to configuration
+  std::string broadcast_code_;             //!< @brief Broadcast code
+  std::map<LidarStatus, int> status_;      //!< @brief LiDAR status
+  uint32_t status_code_;                   //!< @brief LiDAR Status Code
+  ControlSampleRequestCallback callback_;  //!< @brief callback
 };
