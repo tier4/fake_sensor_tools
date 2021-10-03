@@ -387,8 +387,8 @@ void FakeLivoxWidget::addButtonGroup()
   buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_0, 0);
   buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_1, 1);
   buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_2, 2);
-  buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_3, 2);
-  buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_4, 2);
+  buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_3, 3);
+  buttonGroup_time_sync_status->addButton(ui->radioButton_time_sync_status_4, 4);
   connect(
     buttonGroup_time_sync_status, SIGNAL(buttonClicked(int)), this, SLOT(onButtonGroupTimeSyncStatusClicked(int)));
 
